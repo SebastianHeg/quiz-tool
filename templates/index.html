@@ -46,6 +46,9 @@
 
   </div>
 </aside>
+<div id="sidebar-resizer" class="sidebar-resizer" role="separator" tabindex="0"
+     aria-label="Breite der Auswahl ändern" aria-orientation="vertical"
+     aria-controls="sidebar" title="Ziehen oder Pfeiltasten zum Ändern der Breite"></div>
 
 <!-- ═══════════════ MAIN ══════════════════════════════════ -->
 <main>
@@ -81,6 +84,10 @@
     <button class="primary" onclick="loadNextQuestion()">Nächste Frage →</button>
   </div>
 </main>
+
+<div id="stats-resizer" class="sidebar-resizer" role="separator" tabindex="0"
+     aria-label="Breite der Statistik ändern" aria-orientation="vertical"
+     aria-controls="stats-panel" title="Ziehen oder Pfeiltasten zum Ändern der Breite"></div>
 
 <!-- ═══════════════ STATS PANEL ══════════════════════════ -->
 <div id="stats-panel">
@@ -122,6 +129,7 @@
   </button>
 </nav>
 
+<script src="{{ url_for('static', filename='sidebar-resize.js') }}" defer></script>
 <script src="{{ url_for('static', filename='trainer.js') }}" defer></script>
 </body>
 </html>

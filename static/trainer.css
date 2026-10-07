@@ -17,6 +17,9 @@
   --radius:  6px;
   --nav-h:   52px;
   --header-h: 54px;
+  --sidebar-width: 240px;
+  --stats-width: 270px;
+  --resize-handle-width: 6px;
 }
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -27,18 +30,39 @@ body {
   color: var(--text);
   font-family: 'Source Serif 4', Georgia, serif;
   font-weight: 300;
-  /* Desktop: 3-column grid */
+  /* Desktop panels separated by resize handles. */
   display: grid;
   grid-template-rows: var(--header-h) 1fr 36px;
-  grid-template-columns: 240px minmax(0, 1fr) 270px;
+  grid-template-columns: var(--sidebar-width) var(--resize-handle-width) minmax(0, 1fr) var(--resize-handle-width) var(--stats-width);
   grid-template-areas:
-    "header  header  header"
-    "sidebar main    stats"
-    "footer  footer  footer";
+    "header  header       header header        header"
+    "sidebar left-resizer main   right-resizer stats"
+    "footer  footer       footer footer        footer";
   min-height: 100dvh;
   height: 100dvh;
   overflow: hidden;
 }
+
+/* Desktop resize handles */
+.sidebar-resizer {
+  background: var(--border);
+  cursor: col-resize;
+  touch-action: none;
+  z-index: 5;
+}
+#sidebar-resizer { grid-area: left-resizer; }
+#stats-resizer { grid-area: right-resizer; }
+.sidebar-resizer:hover,
+.sidebar-resizer:focus-visible {
+  background: var(--brass);
+  outline: none;
+}
+body.resizing-sidebars,
+body.resizing-sidebars * {
+  cursor: col-resize !important;
+  user-select: none;
+}
+aside, #stats-panel { min-width: 0; }
 
 /* ═══ HEADER ═══════════════════════════════════════════ */
 header {
@@ -442,6 +466,7 @@ footer {
 /* ═══ MOBILE PANELS ════════════════════════════════════ */
 /* On mobile, sidebar/stats are overlaid sheets */
 @media (max-width: 700px) {
+  .sidebar-resizer { display: none; }
   body {
     grid-template-rows: var(--header-h) 1fr;
     grid-template-columns: minmax(0, 1fr);
