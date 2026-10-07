@@ -103,6 +103,51 @@ class QuizTests(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(question_store.load_progress("test"), {})
 
+    def test_question_preparation_transitions(self):
+        self.assertEqual(self.client.get("/api/fields/test/question").json["preparation"], "red")
+        for correct, expected in [(False, "red"), (True, "yellow"), (True, "green"),
+                                  (False, "yellow"), (True, "green")]:
+            grade = assessor.Assessment(
+                is_sks=False, correct=correct, result="correct" if correct else "incorrect",
+                sks_punkte=0, score=float(correct), feedback="Grade",
+            )
+            with self.subTest(correct=correct, expected=expected):
+                with patch.object(assessor, "assess", return_value=grade):
+                    self.assertEqual(self._submit_answer().json["preparation"], expected)
+                question = self.client.get("/api/fields/test/questions").json[0]
+                self.assertEqual(question["preparation"], expected)
+                details = question_store.get_topic_stats("test", "Topic")
+                self.assertEqual(details["questions"][0]["preparation"], expected)
+
+    def test_group_preparation_uses_least_prepared_question(self):
+        self._write_json(self.storage_root / "test" / "examens.json", {"Exam": [1, 2]})
+        def preparation():
+            return self.client.get("/api/fields/test/stats").json["preparation"]
+
+        self.assertEqual(preparation(), {"rating": "red", "counts": {"red": 2, "yellow": 0, "green": 0}})
+        question_store.record_attempt("test", 1, True, 1)
+        question_store.record_attempt("test", 1, True, 1)
+        self.assertEqual(preparation()["rating"], "red")
+        question_store.record_attempt("test", 2, True, 1)
+        self.assertEqual(preparation(), {"rating": "yellow", "counts": {"red": 0, "yellow": 1, "green": 1}})
+        question_store.record_attempt("test", 2, True, 1)
+        self.assertEqual(preparation()["rating"], "green")
+        field = self.client.get("/api/fields/test/stats").json
+        self.assertEqual(field["topics"][0]["preparation"]["rating"], "green")
+        self.assertEqual(field["sets"][0]["preparation"]["rating"], "green")
+        self.assertEqual(field["examens"][0]["preparation"]["rating"], "green")
+        for path in ("topics/Topic", "sets/Exam%20%2F%20special", "examens/Exam"):
+            self.assertEqual(self.client.get(f"/api/fields/test/{path}/stats").json["preparation"]["rating"], "green")
+        question_store.record_attempt("test", 1, False, 0)
+        self.assertEqual(preparation()["rating"], "yellow")
+        self.assertEqual(question_store.get_set_stats("test", "Exam / special")["preparation"]["rating"], "yellow")
+
+    def test_empty_and_legacy_preparation(self):
+        self.assertEqual(question_store.get_topic_stats("test", "Missing")["preparation"]["rating"], "red")
+        legacy = {"1": {"attempts": 3, "correct": 2, "last_seen": "2025-01-01"}}
+        question_store.save_progress("test", legacy)
+        self.assertEqual(question_store.get_set_stats("test", "Exam / special")["preparation"]["rating"], "green")
+
     def test_concurrent_updates(self):
         def record_correct_answer(_):
             return question_store.record_attempt("test", 1, True, 1)

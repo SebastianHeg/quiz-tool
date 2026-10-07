@@ -53,6 +53,12 @@ async function init() {
   const saved = localStorage.getItem('trainer_field');
   const initial = saved && fields.includes(saved) ? saved : fields[0];
   await selectField(initial);
+  await Promise.all(fields.filter(f => f !== initial).map(async field => {
+    try {
+      const stats = await fetch(`/api/fields/${encodeURIComponent(field)}/stats`).then(r => r.json());
+      setSelectionPreparation('field', field, stats.preparation.rating);
+    } catch {}
+  }));
 }
 
 // ═══════════════════════════════════════════════════════════
@@ -190,6 +196,7 @@ async function loadSets(field) {
 //  STATS PANEL
 // ═══════════════════════════════════════════════════════════
 async function refreshStats() {
+  const field = sel.field;
   const scroll = document.getElementById('stats-scroll');
   scroll.innerHTML = '<div id="stats-loading"><div class="spinner"></div> Lade…</div>';
 
@@ -208,6 +215,24 @@ async function refreshStats() {
   if (!stats) { scroll.innerHTML = '<div style="padding:14px;font-size:0.72rem;color:var(--wrong)">Fehler beim Laden.</div>'; return; }
 
   renderStats(stats, ctxType, scroll);
+  const fieldStats = ctxType === 'field' ? stats : await fetch(`/api/fields/${encodeURIComponent(field)}/stats`).then(r => r.json());
+  if (sel.field !== field) return;
+  setSelectionPreparation('field', field, fieldStats.preparation.rating);
+  for (const [type, items] of [['topic', fieldStats.topics], ['set', fieldStats.sets], ['examen', fieldStats.examens]]) {
+    items.forEach(item => setSelectionPreparation(type, item.name, item.preparation.rating));
+  }
+}
+
+const PREPARATION_LABELS = { red: 'Noch nicht vorbereitet', yellow: 'In Vorbereitung', green: 'Gut vorbereitet' };
+
+function preparationIndicator(rating) {
+  const color = Object.hasOwn(PREPARATION_LABELS, rating) ? rating : 'red';
+  return `<span class="preparation-dot preparation-${color}" role="img" aria-label="${PREPARATION_LABELS[color]}" title="${PREPARATION_LABELS[color]}"></span>`;
+}
+
+function setSelectionPreparation(type, key, rating) {
+  const btn = [...document.querySelectorAll(`.sel-btn.type-${type}`)].find(b => b.dataset.selKey === key);
+  if (btn) btn.querySelector('.sel-preparation').innerHTML = preparationIndicator(rating);
 }
 
 function resolveStatsCtx() {
@@ -248,6 +273,14 @@ function renderStats(s, ctxType, container) {
 
   let html = '';
 
+  html += `<div class="preparation-summary">
+    <div class="stats-section-label">Vorbereitung</div>
+    <div>${preparationIndicator(s.preparation.rating)} ${PREPARATION_LABELS[s.preparation.rating]}</div>
+    <div class="preparation-counts">${['red', 'yellow', 'green'].map(color =>
+      `<span>${preparationIndicator(color)} ${s.preparation.counts[color]}</span>`).join('')}</div>
+    <div class="preparation-help">Rot: noch keine richtige Antwort. Gelb: einmal richtig oder zuletzt falsch. Grün: mindestens zweimal richtig und zuletzt richtig. Die schwächste Frage bestimmt die Gruppe.</div>
+  </div>`;
+
   html += `<div class="metric-grid">
     <div class="metric-box"><span class="m-val">${s.total}</span><span class="m-lbl">Fragen</span></div>
     <div class="metric-box"><span class="m-val">${s.attempted}</span><span class="m-lbl">Versucht</span></div>
@@ -285,7 +318,7 @@ function renderStats(s, ctxType, container) {
       const barW = tr ?? 0;
       html += `<div class="breakdown-row" onclick="clickTopicBreakdown(${esc(JSON.stringify(t.name))})">
         <div class="br-top">
-          <span class="br-name">${esc(t.name)}</span>
+          <span class="br-name">${preparationIndicator(t.preparation.rating)} ${esc(t.name)}</span>
           <span class="br-ratio">${t.attempted ? t.correct + '/' + t.attempted : '–'}</span>
         </div>
         <div class="mini-bar-wrap"><div class="mini-bar-fill ${barClass}" style="width:${barW}%"></div></div>
@@ -298,9 +331,8 @@ function renderStats(s, ctxType, container) {
     html += `<div>
       <div class="stats-section-label">Fragen</div>`;
     s.questions.forEach(q => {
-      const dot = q.attempts === 0 ? 'none' : (q.last_result === 'correct' ? 'ok' : 'fail');
       html += `<div class="stats-q-item" onclick="jumpToQuestion(${esc(JSON.stringify(q.id))})">
-        <div class="pdot ${dot}" style="margin-top:3px;flex-shrink:0"></div>
+        ${preparationIndicator(q.preparation)}
         <span class="sq-text">${esc(q.question)}</span>
         <span class="sq-ratio">${q.attempts > 0 ? q.correct + '/' + q.attempts : '–'}</span>
       </div>`;
@@ -361,6 +393,7 @@ function resolveQuestionUrl() {
 
 function displayQuestion(q) {
   currentQuestion = q;
+  document.getElementById('q-preparation').innerHTML = preparationIndicator(q.preparation);
   document.getElementById('reveal-btn').disabled = false;
   document.getElementById('q-topic').textContent    = q.topic;
   document.getElementById('q-subtopic').textContent = q.subtopic || '';
@@ -394,7 +427,12 @@ async function requestAnswerResult(endpoint, extraFields = {}, updateStats = fal
     const result = await postJson(endpoint, { field, id: question.id, ...extraFields });
     if (!isCurrentQuestion()) return;
     showResult(result);
-    if (updateStats) await refreshStats();
+    if (updateStats) {
+      question.preparation = result.preparation;
+      question.progress = result.progress;
+      document.getElementById('q-preparation').innerHTML = preparationIndicator(result.preparation);
+      await refreshStats();
+    }
   } catch (error) {
     if (!isCurrentQuestion()) return;
     showRequestError(error);
@@ -520,7 +558,7 @@ function mkSelBtn(key, label, type, onClick) {
   const btn = document.createElement('button');
   btn.className = `sel-btn type-${type}`;
   btn.dataset.selKey = key;
-  btn.innerHTML = `<span class="sel-label">${esc(label)}</span><span class="sel-badge"></span>`;
+  btn.innerHTML = `<span class="sel-preparation"></span><span class="sel-label">${esc(label)}</span><span class="sel-badge"></span>`;
   btn.onclick = onClick;
   return btn;
 }

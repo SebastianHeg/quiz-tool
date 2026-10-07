@@ -266,6 +266,23 @@ def _average(total: float, count: int) -> float:
     return total / count if count else 0
 
 
+def get_question_preparation(entry: dict) -> str:
+    """Rate lifetime correct answers, with the latest failure overriding green."""
+    if entry.get("attempts", 0) == 0 or entry.get("correct", 0) == 0:
+        return "red"
+    if entry.get("last_result") == "incorrect" or entry.get("correct", 0) == 1:
+        return "yellow"
+    return "green"
+
+
+def _preparation_summary(entries: list[dict]) -> dict:
+    counts = {color: 0 for color in ("red", "yellow", "green")}
+    for entry in entries:
+        counts[get_question_preparation(entry)] += 1
+    rating = "red" if not entries or counts["red"] else "yellow" if counts["yellow"] else "green"
+    return {"rating": rating, "counts": counts}
+
+
 def _calculate_stats(question_ids: list[int], progress: dict) -> dict:
     """Distinguish latest correct questions from cumulative correct attempts."""
     entries = [progress.get(str(question_id), {}) for question_id in question_ids]
@@ -283,6 +300,7 @@ def _calculate_stats(question_ids: list[int], progress: dict) -> dict:
     )
     success_rate = _average(correct_attempts, total_attempts) * 100
     return {
+        "preparation": _preparation_summary(entries),
         "total": total_questions,
         "attempted": attempted_count,
         "unattempted_questions": total_questions - attempted_count,
@@ -306,6 +324,7 @@ def _question_details(questions: list[dict], progress: dict) -> list[dict]:
             "question": question["question"],
             **_default_progress(),
             **progress.get(str(question["id"]), {}),
+            "preparation": get_question_preparation(progress.get(str(question["id"]), {})),
         }
         for question in questions
     ]
@@ -323,6 +342,16 @@ def get_field_stats(field: str) -> dict:
             "total": topic_stats["total"],
             "attempted": topic_stats["attempted"],
             "correct": topic_stats["total_correct"],
+            "preparation": topic_stats["preparation"],
         })
     stats["topics"] = topics
+    for key, groups in (("sets", load_sets(field)), ("examens", load_examens(field))):
+        valid_ids = {question["id"] for question in questions}
+        stats[key] = [
+            {"name": name, "preparation": _preparation_summary([
+                progress.get(str(question_id), {}) for question_id in ids
+                if question_id in valid_ids
+            ])}
+            for name, ids in groups.items()
+        ]
     return stats

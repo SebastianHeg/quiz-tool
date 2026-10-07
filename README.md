@@ -64,6 +64,8 @@ Question selection chooses an unanswered question at random, then randomly choos
 
 Statistics distinguish questions whose latest result was correct (`total_correct`) from all successful attempts (`correct_attempts`). `success_rate` is successful attempts divided by total attempts. The best streak is the longest recorded consecutive correct streak on an individual question. Older progress cannot recover streak records that were already lost.
 
+Preparation indicators appear in the selection lists, current question, and statistics. A question is red when unanswered or never answered correctly, yellow after one correct answer or when its latest answer was wrong, and green after at least two lifetime correct answers when its latest answer was correct. A correct answer after a setback restores green if two correct answers have already been recorded. Fields, topics, exam sets, and custom sets take the color of their least-prepared question; empty groups are red. Statistics include counts of red, yellow, and green questions. Ratings are derived from existing progress without a migration; older records without a latest result use their correct-answer count.
+
 Progress updates use atomic replacement and thread/process locking on Unix. Progress is shared by everyone using the server; there are no accounts or separate learner histories. Subject paths are restricted to direct directories under `sets/`.
 
 `main.py` is a separate desktop Tkinter trainer with independent logic and an older progress schema. Avoid using it and the web app to write the same progress file concurrently.

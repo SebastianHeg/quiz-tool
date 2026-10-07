@@ -98,6 +98,7 @@ def api_assess():
         **asdict(result),
         "answer": question["answer"],
         "progress": progress,
+        "preparation": question_store.get_question_preparation(progress),
     })
 
 
@@ -196,6 +197,7 @@ def _question_view(question: dict, progress: dict) -> dict:
         "subtopic": question.get("subtopic", ""),
         "question": question["question"],
         "progress": progress,
+        "preparation": question_store.get_question_preparation(progress),
     }
 
 
