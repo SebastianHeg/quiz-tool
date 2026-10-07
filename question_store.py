@@ -144,7 +144,7 @@ def get_question_by_id(field: str, question_id: str | int) -> dict | None:
 def get_next_question(
     field: str, group_name: str | None = None, topic: str | None = None
 ) -> dict | None:
-    """Prioritize unanswered questions, then randomize among the weakest questions."""
+    """Prioritize unanswered questions, then the lowest streak capped at two."""
     questions = get_filtered_questions(field, group_name, topic)
     if not questions:
         return None
@@ -156,12 +156,14 @@ def get_next_question(
     if unattempted:
         return random.choice(unattempted)
 
-    def success_rate(question: dict) -> float:
+    def selection_streak(question: dict) -> int:
         entry = progress[str(question["id"])]
-        return entry["correct"] / entry["attempts"]
+        return min(entry.get("streak", 0), 2)
 
-    lowest_rate = min(map(success_rate, questions))
-    weakest_questions = [question for question in questions if success_rate(question) == lowest_rate]
+    lowest_streak = min(map(selection_streak, questions))
+    weakest_questions = [
+        question for question in questions if selection_streak(question) == lowest_streak
+    ]
     return random.choice(weakest_questions)
 
 
