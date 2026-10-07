@@ -23,8 +23,6 @@ The translation direction is fixed by the question ID:
 
 Determine the required direction from the question ID, not from the student's answer.
 
-If a separate `Direction` field is provided, it should agree with this mapping. The question ID takes precedence if the fields conflict.
-
 If the student translates into the wrong target language, treat this as a fundamental translation error and score accordingly.
 
 # Translation Completeness
@@ -49,71 +47,17 @@ All other meaningful content of the sentence/message must be translated and shou
 2. **Accept synonyms and equivalent expressions.**  
    Accept different words or phrases with the same meaning, including appropriate maritime terminology and common linguistic alternatives.
 
-   Differences such as:
-   - "schwer verletzt" / "ernsthaft verletzt"
-   - "ärztliche Hilfe" / "medizinische Unterstützung"
-   - "benötigen" / "brauchen"
-
-   should generally be accepted when they communicate the same meaning.
-
-3. **Evaluate the complete message.**  
-   Check whether the student has translated the complete sentence/message, except for the explicitly ignored ship identifiers and exact position information.
-
-4. **Penalize genuine translation errors.**  
+3. **Penalize genuine translation errors.**  
    Deduct points when the student changes the meaning, mistranslates a nautical term, confuses important information, or introduces information that is not supported by the source.
 
-5. **Treat safety-critical errors seriously.**  
+4. **Treat safety-critical errors seriously.**  
    Errors that change the nature or urgency of an emergency, the requested assistance, the condition of persons or vessels, or other important maritime information are particularly serious.
 
-6. **Distinguish omissions from incorrect statements.**  
-   A missing detail is an omission. A detail translated incorrectly is an error. Both can reduce the score, but their severity depends on the importance of the information.
-
-7. **Accept grammatical variation.**  
+5. **Accept grammatical variation.**  
    Minor grammatical mistakes, spelling errors, or awkward phrasing should have little or no impact if the intended meaning remains clear and correct. Penalize language errors more strongly only when they make the meaning ambiguous or incorrect.
 
-8. **Do not invent information.**  
+6. **Do not invent information.**  
    Evaluate the translation against the supplied reference answer and the original meaning represented by it. Do not require additional information based on general maritime knowledge. Do not reward invented details that alter or extend the message.
-
-9. **Do not grade by keywords.**  
-   Evaluate the meaning of the complete translation. A student can express the correct meaning without using the exact technical terms in the reference, provided that the alternative wording is unambiguous and appropriate.
-
-# Maritime and Technical Terminology
-
-Be more strict with **established maritime, navigational, radio, and technical terminology**.
-
-When the source or reference uses a specific established nautical term, check whether the student's wording correctly expresses that technical concept.
-
-Differences in ordinary language should be accepted when the meaning is equivalent. However, a technically incorrect maritime term should be penalized when it represents a different maritime concept or could cause a misunderstanding in actual radio communication.
-
-For example, terminology such as courses, bearings, port/starboard, knots, wind force, distress/urgency/safety traffic, MAYDAY, PAN PAN, SECURITÉ, DSC, MMSI, and other established maritime concepts should be evaluated for technical correctness.
-
-Do not require exact terminology where the alternative is genuinely equivalent. Be strict where using the wrong term could communicate a different nautical concept.
-
-The fact that a word is less idiomatic or less elegant is **not by itself an error**.
-
-The key question is:
-
-> Does the student's wording communicate the same information and the same relevant maritime/technical meaning?
-
-If yes, accept it.
-
-# Information That Is Not Evaluated
-
-The following information is intentionally excluded from the assessment:
-
-- Ship names
-- Vessel names
-- Call signs
-- MMSI numbers
-- Exact geographic positions
-- Exact coordinates
-- Latitude and longitude
-- N/S/E/W position information
-- Similar vessel-identifying or exact position information
-
-Do not penalize the student merely because this information is omitted, changed, misspelled, or formatted differently.
-
-This does **not** mean that maritime terminology is ignored. Maritime concepts and terminology contained in the rest of the message must still be evaluated.
 
 # Scoring Scale
 
