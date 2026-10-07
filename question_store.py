@@ -1,282 +1,193 @@
-"""
-question_store.py
-Data layer for questions and per-question progress, backed by separate JSON files.
-"""
+"""Question banks, adaptive selection, and shared progress stored as JSON."""
 
+import fcntl
 import json
+import os
 import random
+import tempfile
+from contextlib import contextmanager
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Optional
+from threading import RLock
 
-QUESTIONS_PATH = Path("sets/sks/questions.json")
-PROGRESS_PATH = Path("sets/sks/progress.json")
+FIELDS_PATH = Path(__file__).resolve().parent / "sets"
+REQUIRED_QUESTION_FIELDS = ("topic", "question", "answer")
+_progress_lock = RLock()
 
-FIELDS_PATH = Path("sets")
 
-# ---------------------------------------------------------------------------
-# Public API
-# ---------------------------------------------------------------------------
+def field_path(field: str) -> Path:
+    """Resolve a subject restricted to a direct child of the storage root."""
+    if not isinstance(field, str) or not field:
+        raise ValueError("Invalid field")
+    if field in {".", ".."} or "/" in field or "\\" in field:
+        raise ValueError("Invalid field")
 
-def load_questions(field) -> dict:
-    """Load questions from the questions.json file."""
-    path = FIELDS_PATH / field / "questions.json"
+    path = (FIELDS_PATH / field).resolve()
+    if path.parent != FIELDS_PATH.resolve() or not path.is_dir():
+        raise ValueError("Unknown field")
+    return path
+
+
+def _load_json(field: str, filename: str, *, required: bool = False) -> dict:
+    path = field_path(field) / filename
     if not path.exists():
+        if required:
+            raise ValueError("Missing question bank")
         return {}
-    with open(path, encoding="utf-8") as f:
-        return json.load(f)
+    with path.open(encoding="utf-8") as source:
+        return json.load(source)
+
+
+def load_questions(field: str) -> dict:
+    bank = _load_json(field, "questions.json", required=True)
+    if not isinstance(bank, dict) or not isinstance(bank.get("questions"), list):
+        raise ValueError("Invalid question bank")
+    _validate_questions(bank["questions"])
+    return bank
+
+
+def _validate_questions(questions: list[dict]) -> None:
+    seen_ids = set()
+    for question in questions:
+        if not isinstance(question, dict):
+            raise ValueError("Invalid question schema")
+        question_id = question.get("id")
+        if type(question_id) is not int or question_id <= 0 or question_id in seen_ids:
+            raise ValueError("Question IDs must be unique positive integers")
+        seen_ids.add(question_id)
+        if any(not isinstance(question.get(key), str) for key in REQUIRED_QUESTION_FIELDS):
+            raise ValueError("Invalid question schema")
 
 
 def load_progress(field: str) -> dict:
-    """Load progress data keyed by question ID."""
-    path = FIELDS_PATH / field / "progress.json"
-    if not path.exists():
-        return {}
-    with open(path, encoding="utf-8") as f:
-        return json.load(f)
-    
+    return _load_json(field, "progress.json")
+
+
 def load_sets(field: str) -> dict:
-    path = FIELDS_PATH / field / "sets.json"
-    if not path.exists():
-        return {}
-    with open(path, encoding="utf-8") as f:
-        return json.load(f)
-    
+    return _load_json(field, "sets.json")
+
+
 def load_examens(field: str) -> dict:
-    path = FIELDS_PATH / field / "examens.json"
+    return _load_json(field, "examens.json")
+
+
+def load_system_prompt(field: str) -> str:
+    path = field_path(field) / "system-prompt.txt"
     if not path.exists():
-        return {}
-    with open(path, encoding="utf-8") as f:
-        return json.load(f)
-        
-def load_system_prompt(field: str) -> dict:
-    """Load system prompt."""
-    path = FIELDS_PATH / field / "system-prompt.txt"
-    if not path.exists():
-        return {}
-    with open(path, encoding="utf-8") as f:
-        return f.read()
+        raise ValueError("Missing grading instructions")
+    return path.read_text(encoding="utf-8")
+
+
+@contextmanager
+def progress_transaction(field: str):
+    """Lock the entire read-modify-write operation across threads and processes."""
+    with _progress_lock:
+        with (field_path(field) / ".progress.lock").open("a") as lock:
+            fcntl.flock(lock, fcntl.LOCK_EX)
+            try:
+                yield
+            finally:
+                fcntl.flock(lock, fcntl.LOCK_UN)
+
 
 def save_progress(field: str, progress: dict) -> None:
-    """Save progress data to progress.json."""
-    path = FIELDS_PATH / field / "progress.json"
-    with open(path, "w", encoding="utf-8") as f:
-        json.dump(progress, f, ensure_ascii=False, indent=2)
+    """Replace progress atomically; callers must lock read-modify-write operations."""
+    destination = field_path(field) / "progress.json"
+    temporary_path = None
+    try:
+        with tempfile.NamedTemporaryFile(
+            mode="w", encoding="utf-8", dir=destination.parent, delete=False
+        ) as temporary_file:
+            temporary_path = Path(temporary_file.name)
+            json.dump(progress, temporary_file, ensure_ascii=False, indent=2)
+            temporary_file.flush()
+            os.fsync(temporary_file.fileno())
+        os.replace(temporary_path, destination)
+    finally:
+        if temporary_path is not None:
+            temporary_path.unlink(missing_ok=True)
 
 
-def get_all_questions(field: str) -> list[dict]:
-    """Return all questions with their progress data injected."""
-    store = load_questions(field)
-    progress = load_progress(field)
-    questions = store["questions"]
-        
-    return questions, progress
+def get_all_questions(field: str) -> tuple[list[dict], dict]:
+    return load_questions(field)["questions"], load_progress(field)
 
-def get_filtered_questions(field: str, filter: str, topic: str) -> list[dict]:    
-    questions, _ = get_all_questions(field)
-    if filter:
-        sets = load_sets(field)
-        examens = load_examens(field)
-        if filter in sets:
-            ids = sets[filter]
-        if filter in examens:
-            ids = examens[filter]
-        
-        filtered_questions = []
-        for id in ids:
-            filtered_questions.append(next((q for q in questions if q["id"] == id), None))
-        questions = filtered_questions
 
+def get_filtered_questions(
+    field: str, group_name: str | None = None, topic: str | None = None
+) -> list[dict]:
+    questions = load_questions(field)["questions"]
+    if group_name:
+        groups = {**load_sets(field), **load_examens(field)}
+        if group_name not in groups:
+            raise ValueError("Unknown question set")
+        questions_by_id = {question["id"]: question for question in questions}
+        question_ids = groups[group_name]
+        if any(question_id not in questions_by_id for question_id in question_ids):
+            raise ValueError("Question set contains unknown IDs")
+        questions = [questions_by_id[question_id] for question_id in question_ids]
     if topic:
-        questions = [q for q in questions if q["topic"] == topic]
-        
+        questions = [question for question in questions if question["topic"] == topic]
     return questions
 
 
-def get_question_by_id(field: str, qid: str) -> Optional[dict]:
-    questions, _ = get_all_questions(field)
-    return next((q for q in questions if q["id"] == int(qid)), None)
+def get_question_by_id(field: str, question_id: str | int) -> dict | None:
+    if isinstance(question_id, bool) or not isinstance(question_id, (str, int)):
+        raise ValueError("Invalid question ID")
+    try:
+        numeric_id = int(question_id)
+    except ValueError:
+        raise ValueError("Invalid question ID") from None
+    questions = load_questions(field)["questions"]
+    return next((question for question in questions if question["id"] == numeric_id), None)
 
 
-def get_next_question(field: str, filter: Optional[str] = None, topic: Optional[str] = None) -> Optional[dict]:
-    """
-    Return the question with the lowest success-rate among those with at
-    least one attempt; fall back to any unattempted question, then random.
-    Optionally filter by topic.
-    """
-    questions = get_filtered_questions(field, filter, topic)
-    progress = load_progress(field)
-
-    if topic:
-        questions = [q for q in questions if q["topic"] == topic]
+def get_next_question(
+    field: str, group_name: str | None = None, topic: str | None = None
+) -> dict | None:
+    """Prioritize unanswered questions, then randomize among the weakest questions."""
+    questions = get_filtered_questions(field, group_name, topic)
     if not questions:
         return None
-
+    progress = load_progress(field)
     unattempted = [
-        q for q in questions
-        if progress.get(str(q["id"]), {}).get("attempts", 0) == 0
+        question for question in questions
+        if progress.get(str(question["id"]), {}).get("attempts", 0) == 0
     ]
     if unattempted:
         return random.choice(unattempted)
 
-    return min(
-        questions,
-        key=lambda q: _success_rate(progress[str(q["id"])]),
+    def success_rate(question: dict) -> float:
+        entry = progress[str(question["id"])]
+        return entry["correct"] / entry["attempts"]
+
+    lowest_rate = min(map(success_rate, questions))
+    weakest_questions = [question for question in questions if success_rate(question) == lowest_rate]
+    return random.choice(weakest_questions)
+
+
+def record_attempt(field: str, question_id: str | int, correct: bool, score: float) -> dict:
+    with progress_transaction(field):
+        progress = load_progress(field)
+        entry = progress.setdefault(str(question_id), _default_progress())
+        _update_attempt(entry, correct, score)
+        save_progress(field, progress)
+        return entry
+
+
+def _update_attempt(entry: dict, correct: bool, score: float) -> None:
+    previous_streak = entry.get("streak", 0)
+    entry["attempts"] += 1
+    entry["correct"] += int(correct)
+    entry["streak"] = previous_streak + 1 if correct else 0
+    entry["best_streak"] = max(
+        entry.get("best_streak", 0), previous_streak, entry["streak"]
     )
-
-
-def record_attempt(field: str, qid: str, correct: bool, score: int) -> dict:
-    """Persist one attempt and return the updated progress block."""
-    progress = load_progress(field)
-    q_id = str(qid)
-    
-    if q_id not in progress:
-        progress[q_id] = _default_progress()
-    
-    p = progress[q_id]
-    p["attempts"] += 1
-    if correct:
-        p["correct"] += 1
-        p["streak"] = p.get("streak", 0) + 1
-    else:
-        p["streak"] = 0
-    p["last_result"] = "correct" if correct else "incorrect"
-    p["last_score"] = score
-    p["last_attempt"] = datetime.now(timezone.utc).isoformat()
-    
-    save_progress(field, progress)
-    return p
-
-
-def get_fields() -> list[str]:
-    all_fields = [p.name for p in FIELDS_PATH.iterdir() if p.is_dir()]
-    return sorted(all_fields)
-
-
-def get_sets(field: str) -> list[dict]:
-    sets = load_sets(field)
-
-    return [
-        {
-            "name": name,
-            "questions_count": len(questions),
-        }
-        for name, questions in sets.items()
-    ]
-
-def get_examens(field: str) -> list[dict]:
-    sets = load_examens(field)
-
-    return [
-        {
-            "name": name,
-            "questions_count": len(questions),
-        }
-        for name, questions in sets.items()
-    ]
-
-
-def get_topics(field: str) -> list[str]:
-    questions, _ = get_all_questions(field)
-    return sorted({q["topic"] for q in questions})
-
-
-def get_set_stats(field: str, set: str) -> dict:
-    questions = get_filtered_questions(field, set, "")
-    ids = [q["id"] for q in questions]
-    return get_stats(field, ids)
-
-
-def get_examen_stats(field: str, examen: str) -> dict:
-    questions = get_filtered_questions(field, examen, "")
-    ids = [q["id"] for q in questions]
-    return get_stats(field, ids)
-
-
-def get_topic_stats(field: str, topic: str) -> dict:
-    questions = get_filtered_questions(field, "", topic)
-    ids = [q["id"] for q in questions]
-    return get_stats(field, ids)
-
-
-def get_stats(field: str, ids: list[int]) -> dict:
-    questions, progress = get_all_questions(field)
-    if (ids == None):
-        ids = [q["id"] for q in questions]
-
-    total_questions = len(ids)
-
-    attempted_questions = 0
-    correct_questions = 0
-    total_attempts = 0
-    total_correct = 0
-    total_score = 0
-    total_streak = 0
-
-    for question_id in ids:
-        p = progress.get(str(question_id))
-
-        if p is None:
-            continue
-
-        attempted_questions += 1
-
-        attempts = p.get("attempts", 0)
-        correct = p.get("correct", 0)
-
-        total_attempts += attempts
-        total_correct += correct
-
-        total_score += p.get("last_score", 0)
-        total_streak += p.get("streak", 0)
-
-        if p.get("last_result") == "correct":
-            correct_questions += 1
-
-    incorrect_questions = attempted_questions - correct_questions
-
-    return {
-        "total": total_questions,
-        "attempted": attempted_questions,
-        "unattempted_questions": (
-            total_questions - attempted_questions
-        ),
-        "total_correct": correct_questions,
-        "incorrect_questions": incorrect_questions,
-        "completion_percent": (
-            attempted_questions / total_questions * 100
-            if total_questions else 0
-        ),
-        "success_rate": (
-            total_correct / total_attempts * 100
-            if total_attempts else 0
-        ),
-        "average_score": (
-            total_score / attempted_questions
-            if attempted_questions else 0
-        ),
-        "average_streak": (
-            total_streak / attempted_questions
-            if attempted_questions else 0
-        ),
-        "total_attempts": total_attempts,
-        "overall_rate": round(total_correct / total_attempts * 100, 1) if total_attempts else 0,
-    }
-
-
-
-# ---------------------------------------------------------------------------
-# Internal helpers
-# ---------------------------------------------------------------------------
-
-def _success_rate(progress: dict) -> float:
-    if progress["attempts"] == 0:
-        return 1.0
-    return progress["correct"] / progress["attempts"]
+    entry["last_result"] = "correct" if correct else "incorrect"
+    entry["last_score"] = score
+    entry["last_attempt"] = datetime.now(timezone.utc).isoformat()
 
 
 def _default_progress() -> dict:
-    """Return a fresh progress object for a new question."""
     return {
         "attempts": 0,
         "correct": 0,
@@ -285,3 +196,162 @@ def _default_progress() -> dict:
         "last_score": 0,
         "last_attempt": None,
     }
+
+
+def get_fields() -> list[str]:
+    fields = []
+    for path in FIELDS_PATH.iterdir():
+        if not path.is_dir():
+            continue
+        try:
+            bank = load_questions(path.name)
+            load_system_prompt(path.name)
+        except (ValueError, OSError):
+            continue
+        if bank["questions"]:
+            fields.append(path.name)
+    return sorted(fields)
+
+
+def _group_summaries(groups: dict) -> list[dict]:
+    return [
+        {"name": name, "questions_count": len(question_ids)}
+        for name, question_ids in groups.items()
+    ]
+
+
+def get_sets(field: str) -> list[dict]:
+    return _group_summaries(load_sets(field))
+
+
+def get_examens(field: str) -> list[dict]:
+    return _group_summaries(load_examens(field))
+
+
+def get_topics(field: str) -> list[str]:
+    questions = load_questions(field)["questions"]
+    return sorted({question["topic"] for question in questions})
+
+
+def get_set_stats(field: str, set_name: str) -> dict:
+    return _filtered_stats(field, group_name=set_name)
+
+
+def get_examen_stats(field: str, exam_name: str) -> dict:
+    return _filtered_stats(field, group_name=exam_name)
+
+
+def get_topic_stats(field: str, topic: str) -> dict:
+    return _filtered_stats(field, topic=topic)
+
+
+def _filtered_stats(
+    field: str, group_name: str | None = None, topic: str | None = None
+) -> dict:
+    questions = get_filtered_questions(field, group_name, topic)
+    progress = load_progress(field)
+    question_ids = [question["id"] for question in questions]
+    stats = _calculate_stats(question_ids, progress)
+    stats["questions"] = _question_details(questions, progress)
+    return stats
+
+
+def get_stats(field: str, ids: list[int] | None = None) -> dict:
+    questions, progress = get_all_questions(field)
+    question_ids = ids if ids is not None else [question["id"] for question in questions]
+    return _calculate_stats(question_ids, progress)
+
+
+def _average(total: float, count: int) -> float:
+    return total / count if count else 0
+
+
+def get_question_preparation(entry: dict) -> str:
+    """Rate lifetime correct answers, with the latest failure overriding green."""
+    if entry.get("attempts", 0) == 0 or entry.get("correct", 0) == 0:
+        return "red"
+    if entry.get("last_result") == "incorrect" or entry.get("correct", 0) == 1:
+        return "yellow"
+    return "green"
+
+
+def _preparation_summary(entries: list[dict]) -> dict:
+    counts = {color: 0 for color in ("red", "yellow", "green")}
+    for entry in entries:
+        counts[get_question_preparation(entry)] += 1
+    rating = "red" if not entries or counts["red"] else "yellow" if counts["yellow"] else "green"
+    return {"rating": rating, "counts": counts}
+
+
+def _calculate_stats(question_ids: list[int], progress: dict) -> dict:
+    """Distinguish latest correct questions from cumulative correct attempts."""
+    entries = [progress.get(str(question_id), {}) for question_id in question_ids]
+    attempted = [entry for entry in entries if entry.get("attempts", 0) > 0]
+    total_questions = len(question_ids)
+    attempted_count = len(attempted)
+    correct_questions = sum(entry.get("last_result") == "correct" for entry in attempted)
+    total_attempts = sum(entry.get("attempts", 0) for entry in attempted)
+    correct_attempts = sum(entry.get("correct", 0) for entry in attempted)
+    total_score = sum(entry.get("last_score", 0) for entry in attempted)
+    total_streak = sum(entry.get("streak", 0) for entry in attempted)
+    best_streak = max(
+        (entry.get("best_streak", entry.get("streak", 0)) for entry in entries),
+        default=0,
+    )
+    success_rate = _average(correct_attempts, total_attempts) * 100
+    return {
+        "preparation": _preparation_summary(entries),
+        "total": total_questions,
+        "attempted": attempted_count,
+        "unattempted_questions": total_questions - attempted_count,
+        "total_correct": correct_questions,
+        "correct_attempts": correct_attempts,
+        "best_streak": best_streak,
+        "incorrect_questions": attempted_count - correct_questions,
+        "completion_percent": _average(attempted_count, total_questions) * 100,
+        "success_rate": success_rate,
+        "average_score": _average(total_score, attempted_count),
+        "average_streak": _average(total_streak, attempted_count),
+        "total_attempts": total_attempts,
+        "overall_rate": round(success_rate, 1),
+    }
+
+
+def _question_details(questions: list[dict], progress: dict) -> list[dict]:
+    return [
+        {
+            "id": question["id"],
+            "question": question["question"],
+            **_default_progress(),
+            **progress.get(str(question["id"]), {}),
+            "preparation": get_question_preparation(progress.get(str(question["id"]), {})),
+        }
+        for question in questions
+    ]
+
+
+def get_field_stats(field: str) -> dict:
+    questions, progress = get_all_questions(field)
+    stats = _calculate_stats([question["id"] for question in questions], progress)
+    topics = []
+    for topic in sorted({question["topic"] for question in questions}):
+        topic_ids = [question["id"] for question in questions if question["topic"] == topic]
+        topic_stats = _calculate_stats(topic_ids, progress)
+        topics.append({
+            "name": topic,
+            "total": topic_stats["total"],
+            "attempted": topic_stats["attempted"],
+            "correct": topic_stats["total_correct"],
+            "preparation": topic_stats["preparation"],
+        })
+    stats["topics"] = topics
+    for key, groups in (("sets", load_sets(field)), ("examens", load_examens(field))):
+        valid_ids = {question["id"] for question in questions}
+        stats[key] = [
+            {"name": name, "preparation": _preparation_summary([
+                progress.get(str(question_id), {}) for question_id in ids
+                if question_id in valid_ids
+            ])}
+            for name, ids in groups.items()
+        ]
+    return stats

@@ -2,4 +2,8 @@ flask>=3.0
 gpt4all>=2.8
 # For the OpenAI backend (optional):
 openai>=1.0
-dotenv
+python-dotenv
+
+# Question import utilities:
+beautifulsoup4>=4.12
+rapidfuzz>=3.0
