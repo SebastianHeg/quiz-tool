@@ -31,7 +31,7 @@ OPENAI_MODEL=gpt-4o-mini
 
 ## Architecture and storage
 
-`templates/index.html` contains the browser UI. `app.py` exposes JSON endpoints; `question_store.py` handles storage, selection, and statistics; `assessor.py` handles grading. Grading is synchronous. Local inference is serialized because the cached model has shared chat state.
+`templates/index.html` contains the browser markup; `static/trainer.css` and `static/trainer.js` contain its styles and behavior. `app.py` exposes JSON endpoints; `question_store.py` handles storage, selection, and statistics; `assessor.py` handles grading. Grading is synchronous. Local inference is serialized because the cached model has shared chat state.
 
 Each subject lives under `sets/<subject>/`:
 
