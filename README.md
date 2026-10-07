@@ -31,6 +31,8 @@ OPENAI_MODEL=gpt-4o-mini
 
 ## Architecture and storage
 
+After grading, “Mit ChatGPT vertiefen” provides an editable follow-up prompt containing the question, submitted answer, reference answer, grade, and feedback. “In ChatGPT öffnen” opens a new tab with the edited prompt in a best-effort `https://chatgpt.com/?q=…` link. This web query behavior is not guaranteed by the official documentation; “Prompt kopieren” provides a fallback for pasting into ChatGPT, including when signing in or using long prompts. If clipboard access is unavailable, the text is selected for manual copying. The follow-up is cleared when moving to another question and is hidden for reveals or failed grading.
+
 `templates/index.html` contains the browser markup; `static/trainer.css` and `static/trainer.js` contain its styles and behavior. `app.py` exposes JSON endpoints; `question_store.py` handles storage, selection, and statistics; `assessor.py` handles grading. Grading is synchronous. Local inference is serialized because the cached model has shared chat state.
 
 Each subject lives under `sets/<subject>/`:

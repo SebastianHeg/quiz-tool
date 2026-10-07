@@ -313,15 +313,16 @@ function renderStats(s, ctxType, container) {
     html += `<div>
       <div class="stats-section-label">Nach Thema</div>`;
     s.topics.forEach(t => {
-      const tr = t.attempted ? Math.round(t.correct / t.attempted * 100) : null;
-      const barClass = tr == null ? 'zero' : tr >= 70 ? 'good' : tr >= 40 ? 'mid' : 'poor';
-      const barW = tr ?? 0;
+      const counts = t.preparation.counts;
+      const description = `Grün: ${counts.green}, Gelb: ${counts.yellow}, Rot: ${counts.red} (${t.total} Fragen)`;
       html += `<div class="breakdown-row" onclick="clickTopicBreakdown(${esc(JSON.stringify(t.name))})">
         <div class="br-top">
           <span class="br-name">${preparationIndicator(t.preparation.rating)} ${esc(t.name)}</span>
-          <span class="br-ratio">${t.attempted ? t.correct + '/' + t.attempted : '–'}</span>
+          <span class="br-ratio" title="${description}">${['green', 'yellow', 'red'].map(color =>
+            `<span>${preparationIndicator(color)} ${counts[color]}</span>`).join(' ')}</span>
         </div>
-        <div class="mini-bar-wrap"><div class="mini-bar-fill ${barClass}" style="width:${barW}%"></div></div>
+        <div class="preparation-bar" role="img" aria-label="${description}" title="${description}">${['green', 'yellow', 'red'].map(color =>
+          `<div class="preparation-segment preparation-${color}" style="width:${t.total ? counts[color] / t.total * 100 : 0}%"></div>`).join('')}</div>
       </div>`;
     });
     html += `</div>`;
@@ -428,6 +429,7 @@ async function requestAnswerResult(endpoint, extraFields = {}, updateStats = fal
     if (!isCurrentQuestion()) return;
     showResult(result);
     if (updateStats) {
+      prepareChatGptPrompt(question, field, extraFields.answer, result);
       question.preparation = result.preparation;
       question.progress = result.progress;
       document.getElementById('q-preparation').innerHTML = preparationIndicator(result.preparation);
@@ -529,6 +531,58 @@ function resetResultCard() {
   const card = document.getElementById('result-card');
   card.style.display = 'none';
   card.className = '';
+  document.getElementById('chatgpt-followup').hidden = true;
+  document.getElementById('chatgpt-prompt').value = '';
+  document.getElementById('chatgpt-status').textContent = '';
+  updateChatGptLink();
+}
+
+function prepareChatGptPrompt(question, field, answer, result) {
+  const verdict = { correct: 'Richtig', partial: 'Teilweise richtig', wrong: 'Falsch' }[getResultType(result)];
+  document.getElementById('chatgpt-prompt').value = [
+    'Hilf mir, diese Prüfungsfrage und die Bewertung meiner Antwort zu verstehen. Antworte auf Deutsch.',
+    'Erkläre die richtige Lösung verständlich, vergleiche sie mit meiner Antwort und erläutere konkrete Fehler oder fehlende Punkte. Prüfe die Bewertung kritisch, statt sie ungeprüft zu übernehmen. Gib mir anschließend eine kurze Merkhilfe und eine passende Übungsfrage.',
+    `Feld: ${field}`,
+    `Thema: ${question.topic}${question.subtopic ? ' / ' + question.subtopic : ''}`,
+    `Frage:\n${question.question}`,
+    `Meine Antwort:\n${answer}`,
+    `Musterlösung:\n${result.answer}`,
+    `Bewertung: ${verdict} (${Math.round(result.score * 100)}%)${result.is_sks ? `, SKS-Punkte: ${result.sks_punkte}/2` : ''}`,
+    `Feedback:\n${result.feedback}`,
+  ].join('\n\n');
+  document.getElementById('chatgpt-followup').hidden = false;
+  updateChatGptLink();
+}
+
+function updateChatGptLink() {
+  const prompt = document.getElementById('chatgpt-prompt').value;
+  const link = document.getElementById('chatgpt-link');
+  if (prompt.trim()) {
+    // ChatGPT web's prompt query is best-effort; copying remains available.
+    link.href = `https://chatgpt.com/?q=${encodeURIComponent(prompt)}`;
+    link.removeAttribute('aria-disabled');
+  } else {
+    link.removeAttribute('href');
+    link.setAttribute('aria-disabled', 'true');
+  }
+  document.getElementById('chatgpt-status').textContent = '';
+}
+
+async function copyChatGptPrompt() {
+  const input = document.getElementById('chatgpt-prompt');
+  const status = document.getElementById('chatgpt-status');
+  if (!input.value.trim()) {
+    status.textContent = 'Bitte zuerst einen Prompt eingeben.';
+    return;
+  }
+  try {
+    await navigator.clipboard.writeText(input.value);
+    status.textContent = 'Prompt kopiert. In ChatGPT einfügen.';
+  } catch {
+    input.focus();
+    input.select();
+    status.textContent = 'Bitte den markierten Prompt mit Strg+C (Mac: ⌘C) kopieren.';
+  }
 }
 
 function highlightSel(type, activeKey) {
@@ -572,6 +626,7 @@ function esc(s) {
 // Strg+Enter to submit
 document.addEventListener('keydown', e => {
   if (e.key !== 'Enter' || !e.ctrlKey) return;
+  if (e.target.id === 'chatgpt-prompt') return;
   const resultCard = document.getElementById('result-card');
   const visible = getComputedStyle(resultCard).display !== 'none';
   e.preventDefault();
