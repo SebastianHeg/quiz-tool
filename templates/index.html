@@ -82,6 +82,16 @@
     <div id="result-feedback"></div>
     <div class="expected-label">Musterlösung</div>
     <div id="expected-answer-text"></div>
+    <div id="chatgpt-followup" hidden>
+      <label class="expected-label" for="chatgpt-prompt">Mit ChatGPT vertiefen</label>
+      <textarea id="chatgpt-prompt" rows="8" aria-describedby="chatgpt-help" oninput="updateChatGptLink()"></textarea>
+      <p id="chatgpt-help">Prompt nach Wunsch bearbeiten und ChatGPT in einem neuen Tab öffnen. Falls der Text dort nicht übernommen wird, „Prompt kopieren“ nutzen und einfügen.</p>
+      <div class="btn-row">
+        <a id="chatgpt-link" class="chatgpt-link" target="_blank" rel="noopener noreferrer" referrerpolicy="no-referrer">In ChatGPT öffnen ↗</a>
+        <button class="secondary" type="button" onclick="copyChatGptPrompt()">Prompt kopieren</button>
+      </div>
+      <div id="chatgpt-status" role="status" aria-live="polite"></div>
+    </div>
     <button class="primary" onclick="loadNextQuestion()">Nächste Frage →</button>
   </div>
 </main>

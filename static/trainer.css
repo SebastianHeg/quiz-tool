@@ -280,6 +280,16 @@ button.secondary:hover { border-color: var(--foam); color: var(--foam); }
 }
 #expected-answer-text { font-size: 0.87rem; line-height: 1.6; color: var(--foam); margin-bottom: 16px; }
 
+#chatgpt-followup { margin-bottom: 18px; padding-top: 14px; border-top: 1px solid var(--border2); }
+#chatgpt-followup label { display: block; }
+#chatgpt-prompt { min-height: 180px; margin-top: 4px; }
+#chatgpt-help, #chatgpt-status { font-size: 0.72rem; color: var(--muted); line-height: 1.5; }
+#chatgpt-help { margin: 8px 0; }
+#chatgpt-status { margin-top: 6px; }
+.chatgpt-link { display: inline-flex; align-items: center; min-height: 40px; padding: 9px 16px; border: 1px solid var(--wake); border-radius: var(--radius); color: var(--foam); font-family: 'IBM Plex Mono', monospace; font-size: 0.74rem; text-decoration: none; }
+.chatgpt-link:hover { background: var(--panel); }
+.chatgpt-link[aria-disabled="true"] { opacity: 0.35; cursor: default; }
+
 #loading { display: none; align-items: center; gap: 8px; font-family: 'IBM Plex Mono', monospace; font-size: 0.72rem; color: var(--muted); }
 #loading.visible { display: flex; }
 .spinner { width: 13px; height: 13px; border: 2px solid var(--border2); border-top-color: var(--brass); border-radius: 50%; animation: spin 0.7s linear infinite; }
@@ -390,12 +400,10 @@ button.secondary:hover { border-color: var(--foam); color: var(--foam); }
 .breakdown-row .br-top { display: flex; justify-content: space-between; align-items: baseline; }
 .breakdown-row .br-name { font-size: 0.76rem; color: var(--text); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 160px; }
 .breakdown-row .br-ratio { font-family: 'IBM Plex Mono', monospace; font-size: 0.6rem; color: var(--muted); flex-shrink: 0; }
-.mini-bar-wrap { height: 3px; background: var(--border2); border-radius: 2px; overflow: hidden; }
-.mini-bar-fill { height: 100%; border-radius: 2px; transition: width 0.4s ease; }
-.mini-bar-fill.good  { background: var(--correct); }
-.mini-bar-fill.mid   { background: var(--partial); }
-.mini-bar-fill.poor  { background: var(--wrong); }
-.mini-bar-fill.zero  { background: var(--border2); width: 0 !important; }
+.breakdown-row .br-ratio { display: flex; gap: 6px; }
+.breakdown-row .br-ratio .preparation-dot { width: 6px; height: 6px; }
+.preparation-bar { display: flex; height: 6px; background: var(--border2); border-radius: 3px; overflow: hidden; }
+.preparation-segment { height: 100%; transition: width 0.4s ease; }
 
 .stats-q-item {
   display: flex; align-items: flex-start; gap: 7px;
