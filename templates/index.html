@@ -622,7 +622,7 @@
 <footer>
   <span>Trainer v2</span>
   <span id="footer-ctx">–</span>
-  <span id="footer-backend" style="margin-left:auto">backend: gpt4all</span>
+
 </footer>
 
 <!-- ═══════════════ MOBILE BOTTOM NAV ════════════════════ -->
@@ -692,6 +692,7 @@ const sel = {
 };
 
 let currentQuestion = null;
+let questionRequest = 0;
 
 // ═══════════════════════════════════════════════════════════
 //  INIT
@@ -812,8 +813,8 @@ async function loadExamens(field) {
   examens.forEach(e => {
     const btn = mkSelBtn(e.name, e.name, 'examen', () => selectExamen(e));
     btn.dataset.selKey = e.name;
-    if (e.question_count != null)
-      btn.querySelector('.sel-badge').textContent = e.question_count + ' Fragen';
+    if (e.questions_count != null)
+      btn.querySelector('.sel-badge').textContent = e.questions_count + ' Fragen';
     list.appendChild(btn);
   });
 }
@@ -830,8 +831,8 @@ async function loadSets(field) {
   sets.forEach(s => {
     const btn = mkSelBtn(s.name, s.name, 'set', () => selectSet(s));
     btn.dataset.selKey = s.name;
-    if (s.question_count != null)
-      btn.querySelector('.sel-badge').textContent = s.question_count + ' Fragen';
+    if (s.questions_count != null)
+      btn.querySelector('.sel-badge').textContent = s.questions_count + ' Fragen';
     list.appendChild(btn);
   });
 }
@@ -865,12 +866,12 @@ function resolveStatsCtx() {
   if (sel.examen) return {
     ctxType: 'examen',
     ctxName: sel.examen.name,
-    url: `/api/fields/${f}/examens/${sel.examen.name}/stats`,
+    url: `/api/fields/${f}/examens/${encodeURIComponent(sel.examen.name)}/stats`,
   };
   if (sel.set) return {
     ctxType: 'set',
     ctxName: sel.set.name,
-    url: `/api/fields/${f}/sets/${sel.set.name}/stats`,
+    url: `/api/fields/${f}/sets/${encodeURIComponent(sel.set.name)}/stats`,
   };
   if (sel.topic) return {
     ctxType: 'topic',
@@ -892,7 +893,7 @@ const CTX_LABELS = {
 };
 
 function renderStats(s, ctxType, container) {
-  const rate = s.total_attempts ? Math.round(s.total_correct / s.total_attempts * 100) : null;
+  const rate = s.total_attempts ? Math.round(s.success_rate) : null;
   const attemptedPct = s.total ? Math.round(s.attempted / s.total * 100) : 0;
   const rateClass = rate == null ? '' : rate >= 70 ? 'highlight' : rate >= 40 ? '' : 'warn';
 
@@ -933,7 +934,7 @@ function renderStats(s, ctxType, container) {
       const tr = t.attempted ? Math.round(t.correct / t.attempted * 100) : null;
       const barClass = tr == null ? 'zero' : tr >= 70 ? 'good' : tr >= 40 ? 'mid' : 'poor';
       const barW = tr ?? 0;
-      html += `<div class="breakdown-row" onclick="clickTopicBreakdown(${JSON.stringify(t.name)})">
+      html += `<div class="breakdown-row" onclick="clickTopicBreakdown(${esc(JSON.stringify(t.name))})">
         <div class="br-top">
           <span class="br-name">${esc(t.name)}</span>
           <span class="br-ratio">${t.attempted ? t.correct + '/' + t.attempted : '–'}</span>
@@ -949,7 +950,7 @@ function renderStats(s, ctxType, container) {
       <div class="stats-section-label">Fragen</div>`;
     s.questions.forEach(q => {
       const dot = q.attempts === 0 ? 'none' : (q.last_result === 'correct' ? 'ok' : 'fail');
-      html += `<div class="stats-q-item" onclick="jumpToQuestion(${JSON.stringify(q.id)})">
+      html += `<div class="stats-q-item" onclick="jumpToQuestion(${esc(JSON.stringify(q.id))})">
         <div class="pdot ${dot}" style="margin-top:3px;flex-shrink:0"></div>
         <span class="sq-text">${esc(q.question)}</span>
         <span class="sq-ratio">${q.attempts > 0 ? q.correct + '/' + q.attempts : '–'}</span>
@@ -980,6 +981,9 @@ function jumpToQuestion(qid) {
 //  QUESTION LOADING
 // ═══════════════════════════════════════════════════════════
 async function loadNextQuestion() {
+  const requestId = ++questionRequest;
+  currentQuestion = null;
+  document.getElementById('reveal-btn').disabled = true;
   resetResultCard();
   document.getElementById('answer-input').value    = '';
   document.getElementById('answer-input').disabled = false;
@@ -988,6 +992,7 @@ async function loadNextQuestion() {
 
   const url = resolveQuestionUrl();
   const q = await fetch(url).then(r => r.json()).catch(() => ({ error: 'Netzwerkfehler' }));
+  if (requestId !== questionRequest) return;
   if (q.error) { document.getElementById('question-text').textContent = q.error; return; }
   displayQuestion(q);
   // New content can change main's scroll height; always start at the top
@@ -1006,6 +1011,7 @@ function resolveQuestionUrl() {
 
 function displayQuestion(q) {
   currentQuestion = q;
+  document.getElementById('reveal-btn').disabled = false;
   document.getElementById('q-topic').textContent    = q.topic;
   document.getElementById('q-subtopic').textContent = q.subtopic || '';
   document.getElementById('q-id').textContent       = q.id;
@@ -1018,6 +1024,8 @@ function displayQuestion(q) {
 // ═══════════════════════════════════════════════════════════
 async function submitAnswer() {
   if (!currentQuestion) return;
+  const question = currentQuestion;
+  const field = sel.field;
   const answer = document.getElementById('answer-input').value.trim();
   if (!answer) return;
 
@@ -1030,13 +1038,21 @@ async function submitAnswer() {
     const res = await fetch('/api/assess', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ field: sel.field, id: currentQuestion.id, answer }),
+      body: JSON.stringify({ field, id: question.id, answer }),
     }).then(r => r.json());
 
+    if (currentQuestion !== question || sel.field !== field) return;
+    if (res.error) throw new Error(res.error);
     showResult(res);
     await refreshStats();
   } catch (e) {
-    console.error(e);
+    if (currentQuestion !== question || sel.field !== field) return;
+    document.getElementById('result-feedback').textContent = e.message || 'Bewertung fehlgeschlagen. Bitte erneut versuchen.';
+    document.getElementById('result-verdict').textContent = 'Fehler';
+    document.getElementById('expected-answer-text').textContent = '';
+    document.getElementById('result-card').style.display = 'block';
+    document.getElementById('submit-btn').disabled = false;
+    document.getElementById('answer-input').disabled = false;
   } finally {
     document.getElementById('loading').classList.remove('visible');
   }
@@ -1047,6 +1063,8 @@ async function submitAnswer() {
 // ═══════════════════════════════════════════════════════════
 async function revealAnswer() {
   if (!currentQuestion) return;
+  const question = currentQuestion;
+  const field = sel.field;
 
   document.getElementById('submit-btn').disabled   = true;
   document.getElementById('answer-input').disabled = true;
@@ -1057,12 +1075,20 @@ async function revealAnswer() {
     const res = await fetch('/api/reveal-answer', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ field: sel.field, id: currentQuestion.id }),
+      body: JSON.stringify({ field, id: question.id }),
     }).then(r => r.json());
 
+    if (currentQuestion !== question || sel.field !== field) return;
+    if (res.error) throw new Error(res.error);
     showResult(res);
   } catch (e) {
-    console.error(e);
+    if (currentQuestion !== question || sel.field !== field) return;
+    document.getElementById('result-feedback').textContent = e.message || 'Bewertung fehlgeschlagen. Bitte erneut versuchen.';
+    document.getElementById('result-verdict').textContent = 'Fehler';
+    document.getElementById('expected-answer-text').textContent = '';
+    document.getElementById('result-card').style.display = 'block';
+    document.getElementById('submit-btn').disabled = false;
+    document.getElementById('answer-input').disabled = false;
   } finally {
     document.getElementById('loading').classList.remove('visible');
   }

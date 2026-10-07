@@ -1,0 +1,1 @@
+Evaluate the student answer semantically against the reference answer. Accept equivalent correct explanations. Return valid JSON only with score (number from 0 to 1), result (correct, mostly_correct, partially_correct, minimally_correct, or incorrect), and feedback (short explanation).

@@ -4,12 +4,31 @@ Flask entry point. Routes call into question_store and assessor.
 """
 
 from flask import Flask, jsonify, render_template, request, abort, send_from_directory
+from werkzeug.exceptions import HTTPException
 
 import os
 import assessor
 import question_store
 
 app = Flask(__name__)
+app.config["MAX_CONTENT_LENGTH"] = 64 * 1024
+
+
+@app.errorhandler(ValueError)
+def invalid_request(error):
+    return jsonify({"error": str(error)}), 400
+
+
+@app.errorhandler(assessor.AssessmentError)
+def grading_failed(error):
+    app.logger.warning("Assessment failed: %s", error)
+    return jsonify({"error": str(error)}), 502
+
+
+@app.errorhandler(HTTPException)
+def http_error(error):
+    return jsonify({"error": error.description}), error.code
+
 
 
 # ---------------------------------------------------------------------------
@@ -46,10 +65,15 @@ def api_next_question(field: str):
 
 @app.post("/api/assess")
 def api_assess():
-    body = request.get_json(force=True)
+    body = request.get_json()
+    if not isinstance(body, dict):
+        return jsonify({"error": "Expected a JSON object"}), 400
     field = body.get("field")
     qid = body.get("id")
-    student_answer = (body.get("answer") or "").strip()
+    student_answer = body.get("answer")
+    if not isinstance(student_answer, str):
+        return jsonify({"error": "Answer must be text"}), 400
+    student_answer = student_answer.strip()
 
     if not qid or not student_answer:
         return jsonify({"error": "Missing 'id' or 'answer'"}), 400
@@ -83,7 +107,9 @@ def api_assess():
 
 @app.post("/api/reveal-answer")
 def api_reveal_answer():
-    body = request.get_json(force=True)
+    body = request.get_json()
+    if not isinstance(body, dict):
+        return jsonify({"error": "Expected a JSON object"}), 400
     field = body.get("field")
     qid = body.get("id")
 
@@ -131,14 +157,6 @@ def api_sets(field: str):
     return jsonify(question_store.get_sets(field))
 
 @app.get("/api/fields/<field>/stats")
-def api_stats(field: str):
-    if field == "undefined":
-        print("not serving request with undefined field")
-        abort(400, description="missing field parameter")
-        
-    return jsonify(question_store.get_stats(field, ids=None))
-
-@app.get("/api/fields/<field>/stats")
 def api_field_stats(field: str):
     if field == "undefined":
         print("not serving request with undefined field")
@@ -146,7 +164,7 @@ def api_field_stats(field: str):
         
     return jsonify(question_store.get_field_stats(field))
 
-@app.get("/api/fields/<field>/topics/<topic>/stats")
+@app.get("/api/fields/<field>/topics/<path:topic>/stats")
 def api_topic_stats(field: str, topic: str):
     if field == "undefined":
         print("not serving request with undefined field")
@@ -154,7 +172,7 @@ def api_topic_stats(field: str, topic: str):
         
     return jsonify(question_store.get_topic_stats(field, topic))
 
-@app.get("/api/fields/<field>/examens/<examen>/stats")
+@app.get("/api/fields/<field>/examens/<path:examen>/stats")
 def api_pruefung_stats(field: str, examen: str):
     if field == "undefined":
         print("not serving request with undefined field")
@@ -162,7 +180,7 @@ def api_pruefung_stats(field: str, examen: str):
 
     return jsonify(question_store.get_examen_stats(field, examen))
 
-@app.get("/api/fields/<field>/sets/<set_name>/stats")
+@app.get("/api/fields/<field>/sets/<path:set_name>/stats")
 def api_set_stats(field: str, set_name: str):
     if field == "undefined":
         print("not serving request with undefined field")
