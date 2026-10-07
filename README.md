@@ -62,7 +62,7 @@ IDs must be unique positive integers. Existing IDs should remain stable because 
 
 Grading instructions must request JSON with `score` from 0 to 1 and `feedback`, plus either `result` (`correct`, `fully_correct`, `mostly_correct`, `partially_correct`, `minimally_correct`, `incorrect`) or SKS fields `correct` and `sks_punkte` (0–2). Invalid model output returns an error without recording an attempt.
 
-Question selection chooses an unanswered question at random, then randomly chooses among questions with the lowest lifetime success rate. There is no time-based spaced repetition. Revealing or skipping an answer does not record an attempt.
+Question selection chooses an unanswered question at random, then randomly chooses among questions with the lowest consecutive-correct streak, capped at two for selection. A wrong answer resets the streak to zero; once every eligible question has at least two consecutive correct answers, all are equally eligible. Older progress without a streak is treated as zero. There is no time-based spaced repetition or exclusion of the previous question. Revealing or skipping an answer does not record an attempt.
 
 Statistics distinguish questions whose latest result was correct (`total_correct`) from all successful attempts (`correct_attempts`). `success_rate` is successful attempts divided by total attempts. The best streak is the longest recorded consecutive correct streak on an individual question. Older progress cannot recover streak records that were already lost.
 
