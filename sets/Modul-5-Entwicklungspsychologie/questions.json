@@ -1,0 +1,662 @@
+{
+    "questions": [
+        {
+            "id": 1,
+            "topic": "Wissenschaftstheoretische und methodische Grundlagen",
+            "subtopic": "Psychologie als empirische Wissenschaft",
+            "question": "Was bedeutet es, die Psychologie als empirische Wissenschaft zu bezeichnen?",
+            "answer": "Psychologische Annahmen und aus Theorien abgeleitete Hypothesen werden mit systematischen Methoden anhand von Daten am realen menschlichen Verhalten und Erleben überprüft."
+        },
+        {
+            "id": 2,
+            "topic": "Wissenschaftstheoretische und methodische Grundlagen",
+            "subtopic": "Psychologie als empirische Wissenschaft",
+            "question": "Warum ist die Psychologie nach Darstellung des Studienbriefs keine normative Wissenschaft?",
+            "answer": "Sie untersucht, wie menschliches Verhalten und Erleben beschaffen sind, und nicht, wie Menschen sein sollten; Werte und Normen können dennoch implizit in Forschung und Theorien eingehen."
+        },
+        {
+            "id": 3,
+            "topic": "Wissenschaftstheoretische und methodische Grundlagen",
+            "subtopic": "Theoretische Konstrukte",
+            "question": "Was ist ein psychologisches Konstrukt?",
+            "answer": "Ein Konstrukt ist eine gedankliche Hilfskonstruktion zur Beschreibung von Phänomenen, die nicht direkt beobachtbar sind und nur aus beobachtbaren Daten erschlossen werden können."
+        },
+        {
+            "id": 4,
+            "topic": "Wissenschaftstheoretische und methodische Grundlagen",
+            "subtopic": "Theoretische Konstrukte",
+            "question": "Warum darf ein wissenschaftliches Konstrukt nicht einfach mit dem gleichnamigen Alltagsbegriff gleichgesetzt werden?",
+            "answer": "Weil Konstrukte ihre Bedeutung aus der jeweiligen Theorie erhalten und daher trotz gleicher Bezeichnung eine andere Bedeutung als entsprechende Alltagsbegriffe haben können."
+        },
+        {
+            "id": 5,
+            "topic": "Wissenschaftstheoretische und methodische Grundlagen",
+            "subtopic": "Operationalisierung",
+            "question": "Was bedeutet Operationalisierung eines theoretischen Konstrukts?",
+            "answer": "Operationalisierung bezeichnet die Festlegung, anhand welcher beobachtbaren Verhaltens- oder Erlebensindikatoren und mit welchen Verfahren ein theoretisches Konstrukt empirisch zugänglich gemacht wird."
+        },
+        {
+            "id": 6,
+            "topic": "Wissenschaftstheoretische und methodische Grundlagen",
+            "subtopic": "Operationalisierung",
+            "question": "Welche Elemente gehören laut Studienbrief außer der Auswahl von Indikatoren zu einer Operationalisierung?",
+            "answer": "Die Spezifikation der Erhebungsmethode, des Erhebungsinstruments, der verwendeten Instrumentteile und der Aufbereitung der gewonnenen Informationen für die Analyse."
+        },
+        {
+            "id": 7,
+            "topic": "Wissenschaftstheoretische und methodische Grundlagen",
+            "subtopic": "Operationalisierung",
+            "question": "Warum kann eine einzelne Operationalisierung ein komplexes Konstrukt gewöhnlich nicht vollständig erfassen?",
+            "answer": "Weil jede Operationalisierung nur bestimmte Aspekte des Bedeutungsraums eines Konstrukts durch ausgewählte Indikatoren und Verfahren abbildet."
+        },
+        {
+            "id": 8,
+            "topic": "Wissenschaftstheoretische und methodische Grundlagen",
+            "subtopic": "Fragebogenmethoden",
+            "question": "Welchen praktischen Vorteil haben geschlossene Fragebögen gegenüber aufwendigeren Erhebungsmethoden?",
+            "answer": "Sie sind vergleichsweise unaufwendig und deshalb leicht einsetzbar."
+        },
+        {
+            "id": 9,
+            "topic": "Wissenschaftstheoretische und methodische Grundlagen",
+            "subtopic": "Fragebogenmethoden",
+            "question": "Welches Validitätsproblem kann bei geschlossenen Ratingskalen entstehen?",
+            "answer": "Eine angekreuzte Zahl kann das tatsächlich gemeinte Erleben nur unzureichend abbilden und für verschiedene Personen unterschiedliche Bedeutungen haben."
+        },
+        {
+            "id": 10,
+            "topic": "Wissenschaftstheoretische und methodische Grundlagen",
+            "subtopic": "Fragebogenmethoden",
+            "question": "Warum kann die gute statistische Auswertbarkeit numerischer Fragebogendaten nicht deren psychologische Validität garantieren?",
+            "answer": "Weil eine numerische Antwort das interessierende psychische Phänomen trotz guter statistischer Verarbeitbarkeit unangemessen repräsentieren kann."
+        },
+        {
+            "id": 11,
+            "topic": "Emotionale Ausdrucksregulation",
+            "subtopic": "Display Rules",
+            "question": "Was sind display rules im Kontext der Regulation emotionalen Ausdrucks?",
+            "answer": "Display rules sind soziale beziehungsweise kulturelle Regeln dafür, wann und wo welches emotionale Ausdrucksverhalten angemessen oder erwartet ist."
+        },
+        {
+            "id": 12,
+            "topic": "Emotionale Ausdrucksregulation",
+            "subtopic": "Display Rules",
+            "question": "Welche Fähigkeiten sind notwendig, damit ein Kind Gefühl und sichtbaren Ausdruck gezielt voneinander entkoppeln kann?",
+            "answer": "Es benötigt willkürliche Kontrolle der Gesichtsmuskulatur, ein Verständnis dafür, dass Gefühle privat und Ausdruck sichtbar ist, Perspektivübernahme sowie Kenntnisse sozialer oder kultureller display rules."
+        },
+        {
+            "id": 13,
+            "topic": "Emotionale Ausdrucksregulation",
+            "subtopic": "Display Rules",
+            "question": "Wie wurde Ausdruckskontrolle im Paradigma des enttäuschenden Geschenks untersucht?",
+            "answer": "Kinder erhielten ein attraktives und ein unattraktives Geschenk; ihr mimischer Ausdruck wurde in einer sozialen und einer nicht-sozialen Situation gefilmt und systematisch ausgewertet."
+        },
+        {
+            "id": 14,
+            "topic": "Emotionale Ausdrucksregulation",
+            "subtopic": "Display Rules",
+            "question": "Warum wurde beim enttäuschenden Geschenk zwischen einer sozialen und einer nicht-sozialen Situation unterschieden?",
+            "answer": "Nur in der sozialen Situation bestand ein Grund, den Ausdruck gegenüber einer beobachtenden Person zu regulieren; die nicht-soziale Situation diente als Vergleichsbedingung."
+        },
+        {
+            "id": 15,
+            "topic": "Emotionale Ausdrucksregulation",
+            "subtopic": "Display Rules",
+            "question": "Welche zentrale Diskrepanz zeigte sich zwischen dem Verhalten und dem Verständnis von display rules bei jüngeren Vorschulkindern?",
+            "answer": "Auch jüngere Kinder konnten display rules bereits spontan im Verhalten befolgen, obwohl ihr systematisches Verständnis der Unterscheidung zwischen wirklichem Gefühl und sichtbarem Ausdruck noch geringer war."
+        },
+        {
+            "id": 16,
+            "topic": "Wissenschaftstheoretische und methodische Grundlagen",
+            "subtopic": "Generalisierung",
+            "question": "Was bedeutet Generalisierung in empirischer psychologischer Forschung?",
+            "answer": "Generalisierung bedeutet, von den Ergebnissen einer untersuchten Stichprobe auf die entsprechende Grundgesamtheit zu schließen."
+        },
+        {
+            "id": 17,
+            "topic": "Wissenschaftstheoretische und methodische Grundlagen",
+            "subtopic": "Generalisierung",
+            "question": "Welche Voraussetzung ist für eine belastbare Generalisierung von einer Stichprobe auf eine Grundgesamtheit besonders wichtig?",
+            "answer": "Die Stichprobe sollte die Grundgesamtheit repräsentieren und idealerweise als Zufallsauswahl aus ihr hervorgegangen sein."
+        },
+        {
+            "id": 18,
+            "topic": "Wissenschaftstheoretische und methodische Grundlagen",
+            "subtopic": "Generalisierung",
+            "question": "Warum ist die Generalisierbarkeit entwicklungspsychologischer Untersuchungen mit Kindern häufig problematisch?",
+            "answer": "Die Auswahl hängt oft von kooperierenden Einrichtungen, elterlicher Zustimmung und Selbstselektion der Kinder ab und entspricht daher häufig keiner echten Zufallsauswahl."
+        },
+        {
+            "id": 19,
+            "topic": "Wissenschaftstheoretische und methodische Grundlagen",
+            "subtopic": "Ökologische Validität",
+            "question": "Welche Frage stellt sich bei der Beurteilung der ökologischen Validität einer psychologischen Untersuchung?",
+            "answer": "Ob Erkenntnisse aus der Untersuchungssituation auch für das interessierende Phänomen außerhalb dieses künstlichen oder besonderen Untersuchungskontexts gültig sind."
+        },
+        {
+            "id": 20,
+            "topic": "Wissenschaftstheoretische und methodische Grundlagen",
+            "subtopic": "Ökologische Validität",
+            "question": "Wie definiert Bronfenbrenner ökologische Validität im Studienbrief?",
+            "answer": "Als das Ausmaß, in dem die von den Versuchspersonen erlebte Untersuchungsumwelt tatsächlich die Eigenschaften besitzt, die der Forscher ihr zuschreibt."
+        },
+        {
+            "id": 21,
+            "topic": "Wissenschaftstheoretische und methodische Grundlagen",
+            "subtopic": "Nomothetischer und idiographischer Ansatz",
+            "question": "Worin unterscheiden sich nomothetische und idiographische wissenschaftliche Ansätze?",
+            "answer": "Nomothetische Ansätze suchen nach allgemeinen Gesetzmäßigkeiten, während idiographische Ansätze das Einzelne beziehungsweise den individuellen Fall in seiner besonderen Gestalt zum Ausgangspunkt nehmen."
+        },
+        {
+            "id": 22,
+            "topic": "Wissenschaftstheoretische und methodische Grundlagen",
+            "subtopic": "Nomothetischer und idiographischer Ansatz",
+            "question": "Warum kritisiert der Studienbrief eine strikt ausschließende Gegenüberstellung von nomothetischer und idiographischer Forschung?",
+            "answer": "Weil auch Naturwissenschaften idiographisch und Geisteswissenschaften nomothetisch arbeiten können; die Psychologie kann sowohl allgemeine Gesetzmäßigkeiten als auch Einzelfälle untersuchen."
+        },
+        {
+            "id": 23,
+            "topic": "Wissenschaftstheoretische und methodische Grundlagen",
+            "subtopic": "Nomothetischer und idiographischer Ansatz",
+            "question": "Welcher Fehler kann entstehen, wenn Ergebnisse auf Gruppenebene unmittelbar auf einzelne Personen übertragen werden?",
+            "answer": "Interindividuelle Variation beziehungsweise aggregierte Gruppendaten werden fälschlich als Aussage über intraindividuelle Prozesse einzelner Personen interpretiert."
+        },
+        {
+            "id": 24,
+            "topic": "Soziokulturelle Entwicklungstheorien",
+            "subtopic": "Soziogenetische Ansätze",
+            "question": "Was kennzeichnet einen soziogenetischen Ansatz in der Psychologie?",
+            "answer": "Er nimmt einen sozialen Ursprung psychischer Funktionen an, ohne soziale Determiniertheit zu behaupten; der Mensch setzt sich aktiv und selektiv mit seiner sozialen und kulturellen Welt auseinander."
+        },
+        {
+            "id": 25,
+            "topic": "Soziokulturelle Entwicklungstheorien",
+            "subtopic": "Soziogenetische Ansätze",
+            "question": "Welche drei im Studienbrief dargestellten Denker werden als Baumeister soziogenetischen Denkens bezeichnet?",
+            "answer": "George Herbert Mead, Georg Simmel und Lev Vygotsky."
+        },
+        {
+            "id": 26,
+            "topic": "Soziokulturelle Entwicklungstheorien",
+            "subtopic": "Meads Theorie des Selbst",
+            "question": "Was bezeichnet Mead als ME?",
+            "answer": "Das ME ist die strukturelle, konventionelle und relativ stabile Komponente des Selbst, in der die internalisierten Haltungen sozialer Anderer und letztlich des generalized other repräsentiert sind."
+        },
+        {
+            "id": 27,
+            "topic": "Soziokulturelle Entwicklungstheorien",
+            "subtopic": "Meads Theorie des Selbst",
+            "question": "Wie entsteht das ME nach Mead?",
+            "answer": "Durch Rollenübernahme, besonders im kindlichen Rollenspiel, sowie durch Kommunikation und andere symbolische Prozesse, in denen Haltungen anderer internalisiert werden."
+        },
+        {
+            "id": 28,
+            "topic": "Soziokulturelle Entwicklungstheorien",
+            "subtopic": "Meads Theorie des Selbst",
+            "question": "Was bezeichnet Mead als I?",
+            "answer": "Das I ist die dynamische, neuheitserzeugende und nicht unmittelbar reflexiv zugängliche Komponente des Selbst, die auf bestehende Strukturen des ME reagiert und sie verändert."
+        },
+        {
+            "id": 29,
+            "topic": "Soziokulturelle Entwicklungstheorien",
+            "subtopic": "Meads Theorie des Selbst",
+            "question": "Wie hängen I und ME bei Mead zusammen?",
+            "answer": "Das ME stellt die aus sozialen Prozessen hervorgegangene symbolische Struktur bereit; das I wirkt dynamisch auf diese Struktur ein und restrukturiert sie, wodurch ein verändertes ME entsteht."
+        },
+        {
+            "id": 30,
+            "topic": "Soziokulturelle Entwicklungstheorien",
+            "subtopic": "Kultivationsprinzip",
+            "question": "Was ist Simmels Kultivationsprinzip?",
+            "answer": "Kultivation ist ein wechselseitiger Prozess, in dem Menschen durch die aktive Gestaltung von Welt und kulturellen Dingen zugleich sich selbst entwickeln und vervollständigen."
+        },
+        {
+            "id": 31,
+            "topic": "Soziokulturelle Entwicklungstheorien",
+            "subtopic": "Kultivationsprinzip",
+            "question": "Worin unterscheiden sich bei Simmel objektive und subjektive Kultur?",
+            "answer": "Objektive Kultur besteht in kulturell hervorgebrachten Formen und Dingen; für die persönliche Entwicklung wird sie erst wirksam, wenn sie vom Individuum angeeignet und in subjektive Kultur überführt wird."
+        },
+        {
+            "id": 32,
+            "topic": "Soziokulturelle Entwicklungstheorien",
+            "subtopic": "Kultivationsprinzip",
+            "question": "Warum stellt bloßer Konsum nach Simmel keine Kultivation dar?",
+            "answer": "Weil bei bloßem Konsum die aktive Verbindung zwischen kulturellem Gegenstand und persönlicher Entwicklung fehlt."
+        },
+        {
+            "id": 33,
+            "topic": "Soziokulturelle Entwicklungstheorien",
+            "subtopic": "Vygotskys soziokultureller Ansatz",
+            "question": "Was bedeutet Vygotskys Annahme, Entwicklung verlaufe vom Intermentalen zum Intramentalen?",
+            "answer": "Prozesse, die zunächst zwischen Menschen in Sprache, Kommunikation und Handlung stattfinden, werden internalisiert und bilden die Grundlage höherer psychischer Funktionen."
+        },
+        {
+            "id": 34,
+            "topic": "Soziokulturelle Entwicklungstheorien",
+            "subtopic": "Vygotskys soziokultureller Ansatz",
+            "question": "Welche besondere Funktion hat Sprache in Vygotskys Entwicklungsauffassung?",
+            "answer": "Sprache ist ein kulturelles und semiotisches Werkzeug; aus sozialer gesprochener Sprache entsteht innere Sprache und daraus Denken."
+        },
+        {
+            "id": 35,
+            "topic": "Soziokulturelle Entwicklungstheorien",
+            "subtopic": "Zone der nächsten Entwicklung",
+            "question": "Was bezeichnet Vygotsky als Zone der nächsten Entwicklung?",
+            "answer": "Den Bereich zwischen der aktuellen Entwicklung und möglichen zukünftigen Entwicklungsformen, in dem noch nicht ausgereifte, aber bereits entstehende psychische Prozesse liegen."
+        },
+        {
+            "id": 36,
+            "topic": "Soziokulturelle Entwicklungstheorien",
+            "subtopic": "Zone der nächsten Entwicklung",
+            "question": "Welche beiden Komponenten tragen nach Vygotsky dazu bei, Potenziale der Zone der nächsten Entwicklung zu realisieren?",
+            "answer": "Die eigene Aktivität des Individuums und soziale Leitung durch andere."
+        },
+        {
+            "id": 37,
+            "topic": "Kognitive Entwicklung",
+            "subtopic": "Piagets Entwicklungstheorie",
+            "question": "Welche vier Stadien der kognitiven Entwicklung unterscheidet Piaget?",
+            "answer": "Das sensumotorische, präoperationale, konkret-operationale und formal-operationale Stadium."
+        },
+        {
+            "id": 38,
+            "topic": "Kognitive Entwicklung",
+            "subtopic": "Piagets Entwicklungstheorie",
+            "question": "Wie ist das Denken im sensumotorischen Stadium nach Piaget charakterisiert?",
+            "answer": "Der Säugling erkennt und löst Probleme durch aktives Einwirken auf die Umwelt mit Wahrnehmung und Motorik."
+        },
+        {
+            "id": 39,
+            "topic": "Kognitive Entwicklung",
+            "subtopic": "Piagets Entwicklungstheorie",
+            "question": "Was kennzeichnet das präoperationale Stadium nach Piaget?",
+            "answer": "Kinder verwenden Symbole zur Repräsentation früherer sensumotorischer Erkenntnisse und entwickeln unter anderem Symbolspiel, verfügen aber noch nicht über die Logik späterer Stadien."
+        },
+        {
+            "id": 40,
+            "topic": "Kognitive Entwicklung",
+            "subtopic": "Piagets Entwicklungstheorie",
+            "question": "Warum war für Piaget das bloße Auswendiglernen seiner vier Stadien nicht der Kern seiner Theorie?",
+            "answer": "Sein Hauptinteresse galt den Prozessen, durch die Kinder mittels Assimilation und Akkommodation neue Schemata entwickeln, nicht lediglich den resultierenden Stadien."
+        },
+        {
+            "id": 41,
+            "topic": "Grundlagen und Modelle der Entwicklung über die Lebensspanne",
+            "subtopic": "Ontogenese",
+            "question": "Was bedeutet Ontogenese?",
+            "answer": "Ontogenese bezeichnet die Entwicklung eines Individuums von der Konzeption bis zum Tod."
+        },
+        {
+            "id": 42,
+            "topic": "Grundlagen und Modelle der Entwicklung über die Lebensspanne",
+            "subtopic": "Entwicklungsbegriff",
+            "question": "Wie definiert der enge Entwicklungsbegriff Entwicklung?",
+            "answer": "Als eine mit dem Lebensalter korrelierte, geordnete, gerichtete und universell gültige Reihe aufeinander aufbauender, unumkehrbarer und qualitativ unterschiedlicher Veränderungen hin zu einem höherwertigen Zielzustand."
+        },
+        {
+            "id": 43,
+            "topic": "Grundlagen und Modelle der Entwicklung über die Lebensspanne",
+            "subtopic": "Entwicklungsbegriff",
+            "question": "Warum ist der enge Entwicklungsbegriff für viele Entwicklungsbereiche unzureichend?",
+            "answer": "Weil Entwicklung nicht immer stufenförmig, unumkehrbar, qualitativ, universell oder auf einen eindeutig höherwertigen Endzustand gerichtet verläuft."
+        },
+        {
+            "id": 44,
+            "topic": "Grundlagen und Modelle der Entwicklung über die Lebensspanne",
+            "subtopic": "Entwicklungsbegriff",
+            "question": "Wie unterscheidet sich der weite Entwicklungsbegriff vom engen Entwicklungsbegriff?",
+            "answer": "Er berücksichtigt Umweltabhängigkeit, interindividuelle Variation, Plastizität, aktive Mitgestaltung durch die Person sowie Gewinne und Verluste über die gesamte Lebensspanne."
+        },
+        {
+            "id": 45,
+            "topic": "Grundlagen und Modelle der Entwicklung über die Lebensspanne",
+            "subtopic": "Entwicklungspsychologie der Lebensspanne",
+            "question": "Was besagt Baltes' Leitsatz der lebenslangen Entwicklung?",
+            "answer": "Ontogenetische Entwicklung ist ein lebenslanger Prozess; keine Altersstufe besitzt grundsätzlich Vorrang, und kontinuierliche wie diskontinuierliche Veränderungen können in allen Lebensphasen auftreten."
+        },
+        {
+            "id": 46,
+            "topic": "Grundlagen und Modelle der Entwicklung über die Lebensspanne",
+            "subtopic": "Entwicklungspsychologie der Lebensspanne",
+            "question": "Was bedeutet Multidirektionalität nach Baltes?",
+            "answer": "Entwicklungsrichtungen können sich zwischen und innerhalb verschiedener Funktionsbereiche unterscheiden; im selben Lebensabschnitt können gleichzeitig Wachstum und Abbau auftreten."
+        },
+        {
+            "id": 47,
+            "topic": "Grundlagen und Modelle der Entwicklung über die Lebensspanne",
+            "subtopic": "Entwicklungspsychologie der Lebensspanne",
+            "question": "Was bedeutet der Leitsatz 'Entwicklung als Gewinn und Verlust'?",
+            "answer": "Entwicklung besteht über die gesamte Lebensspanne nicht nur aus Zuwachs, sondern gleichzeitig aus Gewinnen und Verlusten beziehungsweise Wachstum und Abbau."
+        },
+        {
+            "id": 48,
+            "topic": "Grundlagen und Modelle der Entwicklung über die Lebensspanne",
+            "subtopic": "Entwicklungspsychologie der Lebensspanne",
+            "question": "Was versteht Baltes unter Plastizität?",
+            "answer": "Die intraindividuelle Veränderbarkeit psychischer Entwicklung in Abhängigkeit von Lebensbedingungen und Lebenserfahrungen; Forschung soll dabei auch deren Grenzen bestimmen."
+        },
+        {
+            "id": 49,
+            "topic": "Grundlagen und Modelle der Entwicklung über die Lebensspanne",
+            "subtopic": "Entwicklungspsychologie der Lebensspanne",
+            "question": "Was besagt Baltes' Leitsatz der geschichtlichen Einbettung?",
+            "answer": "Ontogenetische Entwicklung variiert mit den historisch-kulturellen Bedingungen einer jeweiligen Epoche und deren zeitlichem Verlauf."
+        },
+        {
+            "id": 50,
+            "topic": "Grundlagen und Modelle der Entwicklung über die Lebensspanne",
+            "subtopic": "Entwicklungspsychologie der Lebensspanne",
+            "question": "Welche drei Systeme von Entwicklungseinflüssen werden im Kontextualismus der Lebensspannenpsychologie unterschieden?",
+            "answer": "Altersbedingte, geschichtlich bedingte und nicht-normative Entwicklungseinflüsse."
+        },
+        {
+            "id": 51,
+            "topic": "Grundlagen und Modelle der Entwicklung über die Lebensspanne",
+            "subtopic": "Entwicklungspsychologie der Lebensspanne",
+            "question": "Warum verlangt die Lebensspannenperspektive nach Baltes eine multidisziplinäre Betrachtung?",
+            "answer": "Weil menschliche Entwicklung auch Gegenstand anderer Disziplinen wie Biologie, Anthropologie und Soziologie ist und eine rein psychologische Perspektive sie nur ausschnittweise erfassen kann."
+        },
+        {
+            "id": 52,
+            "topic": "Grundlagen und Modelle der Entwicklung über die Lebensspanne",
+            "subtopic": "SOK-Modell",
+            "question": "Wofür steht das SOK-Modell nach Baltes?",
+            "answer": "Für Selektion, Optimierung und Kompensation als zusammenspielende Strategien erfolgreicher lebenslanger Entwicklung."
+        },
+        {
+            "id": 53,
+            "topic": "Grundlagen und Modelle der Entwicklung über die Lebensspanne",
+            "subtopic": "SOK-Modell",
+            "question": "Was bedeuten Selektion, Optimierung und Kompensation im SOK-Modell jeweils?",
+            "answer": "Selektion ist die Auswahl zu verfolgender Möglichkeiten oder Ziele, Optimierung die Suche nach geeigneten Mitteln zu ihrer möglichst guten Verwirklichung und Kompensation die Nutzung neuer Wege oder Mittel, wenn bisherige Ressourcen wegfallen."
+        },
+        {
+            "id": 54,
+            "topic": "Grundlagen und Modelle der Entwicklung über die Lebensspanne",
+            "subtopic": "SOK-Modell",
+            "question": "Wie veranschaulicht das Beispiel des Pianisten Arthur Rubinstein das SOK-Modell?",
+            "answer": "Er verringerte sein Repertoire als Selektion, übte die ausgewählten Stücke intensiver als Optimierung und verlangsamte vor schnellen Passagen das Tempo, damit diese im Kontrast schneller wirkten, als Kompensation."
+        },
+        {
+            "id": 55,
+            "topic": "Methoden der Entwicklungsforschung",
+            "subtopic": "Alter in der Entwicklungsforschung",
+            "question": "Warum ist das Lebensalter keine unabhängige Variable im eigentlichen experimentellen Sinn?",
+            "answer": "Weil das Alter einer Person nicht experimentell variiert oder manipuliert werden kann."
+        },
+        {
+            "id": 56,
+            "topic": "Methoden der Entwicklungsforschung",
+            "subtopic": "Alter in der Entwicklungsforschung",
+            "question": "Warum erklärt ein beobachteter Zusammenhang mit dem Alter noch nicht die Ursache einer Entwicklung?",
+            "answer": "Alter ist kein explikatives Konstrukt; Altersunterschiede müssen durch zugrunde liegende biologische, soziale, kulturelle oder andere Prozesse erklärt werden."
+        },
+        {
+            "id": 57,
+            "topic": "Methoden der Entwicklungsforschung",
+            "subtopic": "Alter in der Entwicklungsforschung",
+            "question": "Welchen Stellenwert besitzt das Alter trotz seiner begrenzten Erklärungskraft in der Entwicklungspsychologie?",
+            "answer": "Es dient häufig als zeitlicher Bezugspunkt und wird in empirischen Designs formal wie eine unabhängige Variable zur Ordnung und zum Vergleich von Entwicklungsunterschieden verwendet."
+        },
+        {
+            "id": 58,
+            "topic": "Methoden der Entwicklungsforschung",
+            "subtopic": "Querschnittmethode",
+            "question": "Wie ist eine Querschnittuntersuchung aufgebaut?",
+            "answer": "Stichproben verschiedener Altersgruppen werden zu einem einzigen Zeitpunkt mit demselben oder einem vergleichbaren Verfahren hinsichtlich eines Merkmals untersucht und miteinander verglichen."
+        },
+        {
+            "id": 59,
+            "topic": "Methoden der Entwicklungsforschung",
+            "subtopic": "Querschnittmethode",
+            "question": "Warum wird die Querschnittmethode in der Entwicklungspsychologie so häufig eingesetzt?",
+            "answer": "Vor allem aus praktischen Gründen: Sie ist schnell durchführbar, Ergebnisse liegen rasch vor und Versuchspersonen müssen nur einmal teilnehmen."
+        },
+        {
+            "id": 60,
+            "topic": "Methoden der Entwicklungsforschung",
+            "subtopic": "Querschnittmethode",
+            "question": "Was ist das Kohortenproblem bei Querschnittuntersuchungen?",
+            "answer": "Altersgruppen gehören zugleich unterschiedlichen Generationen beziehungsweise Kohorten an, sodass beobachtete Unterschiede sowohl alters- als auch kohortenbedingt sein können."
+        },
+        {
+            "id": 61,
+            "topic": "Methoden der Entwicklungsforschung",
+            "subtopic": "Querschnittmethode",
+            "question": "Warum können Querschnittsdaten keine individuellen Entwicklungsverläufe nachweisen?",
+            "answer": "Weil verschiedene Personen verschiedener Altersgruppen nur einmal untersucht werden und daher keine intraindividuellen Veränderungen über die Zeit beobachtet werden."
+        },
+        {
+            "id": 62,
+            "topic": "Methoden der Entwicklungsforschung",
+            "subtopic": "Längsschnittmethode",
+            "question": "Wie ist eine Längsschnittuntersuchung aufgebaut?",
+            "answer": "Eine zunächst altershomogene Stichprobe wird über die Zeit hinweg mehrfach mit demselben oder einem vergleichbaren Verfahren hinsichtlich eines Merkmals untersucht."
+        },
+        {
+            "id": 63,
+            "topic": "Methoden der Entwicklungsforschung",
+            "subtopic": "Längsschnittmethode",
+            "question": "Welchen entscheidenden methodischen Vorteil hat der Längsschnitt gegenüber dem Querschnitt?",
+            "answer": "Er ermöglicht es, intraindividuelle Veränderungen und damit individuelle Entwicklungsverläufe tatsächlich über die Zeit nachzuzeichnen."
+        },
+        {
+            "id": 64,
+            "topic": "Methoden der Entwicklungsforschung",
+            "subtopic": "Längsschnittmethode",
+            "question": "Welche zentralen Nachteile haben Längsschnittuntersuchungen?",
+            "answer": "Sie sind sehr zeitaufwendig, leiden unter Ausfällen von Teilnehmern, können durch selektive Stichproben verzerrt sein und sind anfällig für Testungs- und Übungseffekte."
+        },
+        {
+            "id": 65,
+            "topic": "Methoden der Entwicklungsforschung",
+            "subtopic": "Längsschnittmethode",
+            "question": "Warum löst auch ein Längsschnitt das Kohortenproblem nicht vollständig?",
+            "answer": "Weil über die Zeit dieselbe Kohorte untersucht wird und die Ergebnisse daher möglicherweise nur für diese Generation gelten und nicht ohne Weiteres auf andere Kohorten generalisiert werden können."
+        },
+        {
+            "id": 66,
+            "topic": "Grundlagen und Modelle der Entwicklung über die Lebensspanne",
+            "subtopic": "Entwicklungsaufgaben",
+            "question": "Was ist nach Havighurst eine Entwicklungsaufgabe?",
+            "answer": "Eine Aufgabe, die sich in einer bestimmten Lebensperiode stellt und deren erfolgreiche Bewältigung zu Zufriedenheit und Erfolg, ihr Misslingen dagegen zu Unzufriedenheit und späteren Schwierigkeiten führen kann."
+        },
+        {
+            "id": 67,
+            "topic": "Grundlagen und Modelle der Entwicklung über die Lebensspanne",
+            "subtopic": "Entwicklungsaufgaben",
+            "question": "Aus welchen drei Quellen entstehen Entwicklungsaufgaben nach Havighurst?",
+            "answer": "Aus physischer beziehungsweise individueller Leistungsfähigkeit, soziokulturellen Entwicklungsnormen beziehungsweise kulturellem Druck und individuellen Zielsetzungen oder Werten."
+        },
+        {
+            "id": 68,
+            "topic": "Grundlagen und Modelle der Entwicklung über die Lebensspanne",
+            "subtopic": "Entwicklungsaufgaben",
+            "question": "Welche aktive Rolle hat das Individuum in Havighursts Konzept der Entwicklungsaufgabe?",
+            "answer": "Entwicklung wird als lebenslange Bewältigung von Problemen verstanden, bei der individuelle Ziele eine eigene Quelle von Entwicklungsaufgaben darstellen und die Person ihre Entwicklung mitgestaltet."
+        },
+        {
+            "id": 69,
+            "topic": "Grundlagen und Modelle der Entwicklung über die Lebensspanne",
+            "subtopic": "Entwicklungsaufgaben",
+            "question": "Welche zentrale Kritik lässt sich an konkreten Listen von Entwicklungsaufgaben Havighursts formulieren?",
+            "answer": "Sie sind historisch, gesellschaftlich und kulturell geprägt und besitzen deshalb keine universelle Gültigkeit."
+        },
+        {
+            "id": 70,
+            "topic": "Psychosoziale Entwicklung und Identität",
+            "subtopic": "Eriksons psychosoziale Entwicklung",
+            "question": "Warum wird Eriksons Theorie als psychosoziale Entwicklungstheorie bezeichnet?",
+            "answer": "Weil Entwicklung als lebenslanger Prozess verstanden wird, in dem die Person wiederholt psychosoziale Krisen beziehungsweise Spannungsverhältnisse zwischen individuellen und sozialen Anforderungen bewältigt."
+        },
+        {
+            "id": 71,
+            "topic": "Psychosoziale Entwicklung und Identität",
+            "subtopic": "Eriksons psychosoziale Entwicklung",
+            "question": "Welche acht zentralen Themen beziehungsweise Krisen unterscheidet Erikson über die Lebensspanne?",
+            "answer": "Vertrauen vs. Misstrauen, Autonomie vs. Scham und Zweifel, Initiative vs. Schuldgefühl, Werksinn vs. Minderwertigkeitsgefühl, Identität vs. Identitätsdiffusion, Intimität und Solidarität vs. Isolierung, Generativität vs. Stagnation und Selbstabsorption sowie Integrität vs. Verzweiflung."
+        },
+        {
+            "id": 72,
+            "topic": "Psychosoziale Entwicklung und Identität",
+            "subtopic": "Eriksons psychosoziale Entwicklung",
+            "question": "Was bedeutet eine erfolgreiche Bewältigung einer psychosozialen Krise bei Erikson?",
+            "answer": "Nicht die vollständige Beseitigung des negativen Pols, sondern eine Entwicklung, bei der der positive Pol gegenüber dem negativen überwiegt und eine Grundlage für spätere Entwicklungsaufgaben bildet."
+        },
+        {
+            "id": 73,
+            "topic": "Psychosoziale Entwicklung und Identität",
+            "subtopic": "Eriksons psychosoziale Entwicklung",
+            "question": "Welche psychosoziale Krise steht nach Erikson im Zentrum der Adoleszenz?",
+            "answer": "Identität versus Identitätsdiffusion."
+        },
+        {
+            "id": 74,
+            "topic": "Psychosoziale Entwicklung und Identität",
+            "subtopic": "Eriksons psychosoziale Entwicklung",
+            "question": "Was kennzeichnet Generativität nach Erikson?",
+            "answer": "Das Bedürfnis, für kommende Generationen Werte zu schaffen, weiterzugeben und abzusichern, etwa durch Familie oder anderes Engagement für andere."
+        },
+        {
+            "id": 75,
+            "topic": "Psychosoziale Entwicklung und Identität",
+            "subtopic": "Eriksons psychosoziale Entwicklung",
+            "question": "Was bedeutet Integrität in Eriksons letzter Entwicklungsphase?",
+            "answer": "Das bisherige eigene Leben mit seinen positiven und negativen Erfahrungen akzeptieren zu können, statt angesichts seiner begrenzten Veränderbarkeit zu verzweifeln."
+        },
+        {
+            "id": 76,
+            "topic": "Psychosoziale Entwicklung und Identität",
+            "subtopic": "Eriksons Identitätsbegriff",
+            "question": "Welche Aspekte umfasst Identität bei Erikson?",
+            "answer": "Die Antworten auf 'Wer bin ich?' und 'Wer will ich sein?', erlebte Selbstkontinuität und Kohärenz trotz Veränderungen, Einzigartigkeit gegenüber anderen sowie zugleich Zugehörigkeit zu anderen."
+        },
+        {
+            "id": 77,
+            "topic": "Psychosoziale Entwicklung und Identität",
+            "subtopic": "Eriksons Identitätsbegriff",
+            "question": "Welche Kritik formuliert der Studienbrief an der Vorstellung, Identitätsentwicklung werde in der Adoleszenz endgültig abgeschlossen?",
+            "answer": "Die Fragen nach dem eigenen Selbst stellen sich im Leben wiederholt und kontextabhängig, sodass Identität vielfach zyklisch neu konstruiert wird."
+        },
+        {
+            "id": 78,
+            "topic": "Psychosoziale Entwicklung und Identität",
+            "subtopic": "Marcias Identitätsstatus-Ansatz",
+            "question": "Welche beiden Dimensionen bilden die Grundlage von Marcias Identitätsstatus-Ansatz?",
+            "answer": "Exploration und Commitment beziehungsweise innere Festlegung."
+        },
+        {
+            "id": 79,
+            "topic": "Psychosoziale Entwicklung und Identität",
+            "subtopic": "Marcias Identitätsstatus-Ansatz",
+            "question": "Wie wird der Identitätsstatus im Identity Status Interview von Marcia erfasst?",
+            "answer": "Durch halbstrukturierte, domänenspezifische Interviews, in denen das Ausmaß von Exploration und Commitment beurteilt und daraus ein Identitätsstatus bestimmt wird."
+        },
+        {
+            "id": 80,
+            "topic": "Psychosoziale Entwicklung und Identität",
+            "subtopic": "Marcias Identitätsstatus-Ansatz",
+            "question": "Welche vier Identitätsstatus ergeben sich aus der Kombination von Exploration und Commitment?",
+            "answer": "Übernommene Identität, erarbeitete Identität, Moratorium und Identitätsdiffusion."
+        },
+        {
+            "id": 81,
+            "topic": "Psychosoziale Entwicklung und Identität",
+            "subtopic": "Marcias Identitätsstatus-Ansatz",
+            "question": "Wie unterscheiden sich übernommene und erarbeitete Identität?",
+            "answer": "Bei der übernommenen Identität besteht hohes Commitment ohne vorherige Exploration; bei der erarbeiteten Identität folgt das Commitment auf eine Explorationsphase."
+        },
+        {
+            "id": 82,
+            "topic": "Psychosoziale Entwicklung und Identität",
+            "subtopic": "Marcias Identitätsstatus-Ansatz",
+            "question": "Wie unterscheiden sich Moratorium und Identitätsdiffusion?",
+            "answer": "Im Moratorium findet Exploration ohne Commitment statt; bei Identitätsdiffusion fehlen sowohl Exploration als auch Commitment."
+        },
+        {
+            "id": 83,
+            "topic": "Psychosoziale Entwicklung und Identität",
+            "subtopic": "Marcias Identitätsstatus-Ansatz",
+            "question": "Warum ist die Annahme eines einzigen allgemeinen Identitätsstatus problematisch?",
+            "answer": "Weil dieselbe Person in unterschiedlichen Lebensdomänen unterschiedliche Identitätsstatus aufweisen kann."
+        },
+        {
+            "id": 84,
+            "topic": "Psychosoziale Entwicklung und Identität",
+            "subtopic": "Marcias Identitätsstatus-Ansatz",
+            "question": "Warum darf Marcias Identitätsstatus nicht unmittelbar mit Identitätsentwicklung gleichgesetzt werden?",
+            "answer": "Marcias Verfahren diagnostiziert zunächst einen Status zu einem Zeitpunkt; Aussagen über Entwicklung erfordern Längsschnittdaten, und die tatsächlichen Statusverläufe sind heterogen und nicht eindeutig altersabhängig."
+        },
+        {
+            "id": 85,
+            "topic": "Psychosoziale Entwicklung und Identität",
+            "subtopic": "Erhebungsmethoden der Identität",
+            "question": "Welche beiden grundlegenden methodischen Zugänge zur Erfassung von Identität werden im Studienbrief dargestellt?",
+            "answer": "Halbstrukturierte beziehungsweise narrative Interviews wie das Identity Status Interview und quantitative Fragebogenverfahren."
+        },
+        {
+            "id": 86,
+            "topic": "Psychosoziale Entwicklung und Identität",
+            "subtopic": "Erhebungsmethoden der Identität",
+            "question": "Wie können Fragebogenverfahren den Identitätsstatus quantitativ erfassen?",
+            "answer": "Entweder direkt durch identitätsstatusbezogene Items oder indirekt durch getrennte Erfassung und Verrechnung von Exploration und Commitment."
+        },
+        {
+            "id": 87,
+            "topic": "Psychosoziale Entwicklung und Identität",
+            "subtopic": "Erhebungsmethoden der Identität",
+            "question": "Welches methodische Problem zeigt der Vergleich verschiedener Identitätsfragebögen wie U-GIDS II und EIPQ?",
+            "answer": "Gleich benannte Dimensionen wie Exploration oder Commitment können unterschiedlich operationalisiert sein, sodass die Verfahren nicht zwingend dasselbe Konstrukt erfassen."
+        },
+        {
+            "id": 88,
+            "topic": "Psychosoziale Entwicklung und Identität",
+            "subtopic": "Erhebungsmethoden der Identität",
+            "question": "Welches mögliche Artefakt können narrative Identitätsinterviews erzeugen?",
+            "answer": "Der narrative Modus kann mehr zeitliche Ordnung und Kohärenz erzeugen, als das tatsächliche Erleben besitzt, wodurch etwa diffuse Identität schwerer sichtbar werden könnte."
+        },
+        {
+            "id": 89,
+            "topic": "Kultur und Entwicklung",
+            "subtopic": "Kulturvergleich",
+            "question": "Was ist das typische Erkenntnisziel kulturvergleichender Psychologie?",
+            "answer": "Sie sucht nach Unterschieden und Gemeinsamkeiten beziehungsweise Universalien psychischer Funktionen zwischen verschiedenen Kulturen."
+        },
+        {
+            "id": 90,
+            "topic": "Kultur und Entwicklung",
+            "subtopic": "Kulturvergleich",
+            "question": "Wie wird Kultur in vielen kulturvergleichenden Untersuchungen operationalisiert?",
+            "answer": "Als eine oder mehrere Variablen, häufig vereinfachend über Land oder Nation als zeitlich, räumlich und sprachlich kohärente Einheit."
+        },
+        {
+            "id": 91,
+            "topic": "Kultur und Entwicklung",
+            "subtopic": "Kulturvergleich",
+            "question": "Welches Problem hat die Gleichsetzung von Kultur mit Land oder Nation?",
+            "answer": "Sie behandelt Kultur als statische und homogene Einheit und verdinglicht damit ein wesentlich komplexeres Phänomen."
+        },
+        {
+            "id": 92,
+            "topic": "Kultur und Entwicklung",
+            "subtopic": "Kulturpsychologie",
+            "question": "Was steht im Zentrum kulturpsychologischer Ansätze?",
+            "answer": "Die Frage, wie Personen in ihrem Handeln, psychischen Funktionieren und ihrer Konstruktion der Lebenswelt mit Kultur verbunden sind, insbesondere durch Prozesse der Bedeutungs- und Sinnkonstruktion."
+        },
+        {
+            "id": 93,
+            "topic": "Kultur und Entwicklung",
+            "subtopic": "Kulturpsychologie",
+            "question": "Worin unterscheidet sich die Kulturpsychologie grundlegend von der kulturvergleichenden Psychologie?",
+            "answer": "Kulturpsychologie behandelt Kultur nicht als äußere unabhängige Variable, sondern als integralen Bestandteil psychischer Funktionen; Kultur und Psyche werden als intrinsisch verbunden und wechselseitig ko-konstruiert verstanden."
+        },
+        {
+            "id": 94,
+            "topic": "Kultur und Entwicklung",
+            "subtopic": "Kultur und Entwicklung",
+            "question": "Warum wäre es aus kulturpsychologischer Perspektive irreführend zu sagen, Kultur 'wirke' lediglich von außen auf die Psyche ein?",
+            "answer": "Weil Kultur im Entwicklungsprozess selbst Bestandteil psychischer Funktionen und Bedeutungsstrukturen wird und nicht nur als externer Einflussfaktor neben der Psyche steht."
+        }
+    ]
+}
